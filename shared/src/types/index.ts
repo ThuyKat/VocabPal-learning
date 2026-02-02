@@ -49,3 +49,4 @@ interface Definition{
     synonyms: string[] | [];
     antonyms: string[] | [];
 }
+export {Word, Category, User, DictionaryResponse, Phonetics, Meaning, Definition};
