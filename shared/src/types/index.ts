@@ -19,3 +19,11 @@ interface Category{
     userId:string;
     createdAt: Date;
 }
+
+interface User{
+    id:string;
+    email:string;
+    displayName?:string;
+    photoUrl?:string;
+    createdAt: Date;
+}
