@@ -30,9 +30,9 @@ interface User{
 //dictionary interface
 interface DictionaryResponse{
     word: string;
-    phonetic: string;
+    phonetic?: string;
     phonetics: Phonetics[];
-    origin: string;
+    origin?: string;
     meanings: Meaning[];
 }
 interface Phonetics{
@@ -46,7 +46,7 @@ interface Meaning{
 interface Definition{
     definition: string;
     example: string;
-    synonyms: string[] | [];
-    antonyms: string[] | [];
+    synonyms: string[];
+    antonyms: string[];
 }
 export {Word, Category, User, DictionaryResponse, Phonetics, Meaning, Definition};
