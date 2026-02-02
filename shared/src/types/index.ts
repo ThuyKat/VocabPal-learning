@@ -27,3 +27,25 @@ interface User{
     photoUrl?:string;
     createdAt: Date;
 }
+//dictionary interface
+interface DictionaryResponse{
+    word: string;
+    phonetic: string;
+    phonetics: Phonetics[];
+    origin: string;
+    meanings: Meaning[];
+}
+interface Phonetics{
+    text: string;
+    audio?: string;
+}
+interface Meaning{
+    partOfSpeech: string;
+    definitions: Definition[];
+}
+interface Definition{
+    definition: string;
+    example: string;
+    synonyms: string[] | [];
+    antonyms: string[] | [];
+}
