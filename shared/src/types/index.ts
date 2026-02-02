@@ -4,10 +4,10 @@ interface Word{
     definition: string;
     partOfSpeech: string;
     example?:string;
-    phenetics?: string;
+    phonetics?: string;
     sourceUrl?:string;
     categoryId?: string;
-    userId:String;
+    userId:string;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -24,7 +24,7 @@ interface User{
     id:string;
     email:string;
     displayName?:string;
-    photoUrl?:string;
+    photoURL?:string;
     createdAt: Date;
 }
 //dictionary interface
