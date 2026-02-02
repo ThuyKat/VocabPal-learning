@@ -122,7 +122,31 @@ npm run lint       # Run ESLint
 
 ## Session Workflow
 
+**At session start:**
 1. Read this file first
-2. Check `docs/SESSION_LOG.md` for current progress
+2. **Read `docs/SESSION_LOG.md`** to know where we left off in previous sessions
 3. Check Jira for current sprint/tickets
 4. Continue from where we left off
+
+**At session end (or after significant work):**
+1. Update `docs/SESSION_LOG.md` with what was done
+2. Note current status and next steps
+
+---
+
+## Code Review Workflow
+
+When reviewing Katie's completed tickets:
+
+1. **Check the code** - Verify the implementation works correctly
+2. **If changes needed** - Make the fix, then document it:
+   - Add a Jira comment with `[Code Review - Changes Made]` header
+   - List all files modified/created/deleted
+   - Explain WHY the change was needed
+   - Include a learning note for future reference
+3. **Answer questions** - If Katie left questions in comments, reply on the same ticket
+4. **Update descriptions** - If original instructions were wrong/outdated, update the ticket description
+5. **Give feedback** - After review, provide overall feedback and save to `docs/FEEDBACK_TO_KATIE.md`:
+   - What was done well
+   - Areas for improvement
+   - Tips for next time
