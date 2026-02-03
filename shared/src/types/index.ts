@@ -36,7 +36,7 @@ interface DictionaryResponse{
     meanings: Meaning[];
 }
 interface Phonetics{
-    text: string;
+    text?: string;
     audio?: string;
 }
 interface Meaning{
@@ -45,8 +45,8 @@ interface Meaning{
 }
 interface Definition{
     definition: string;
-    example: string;
-    synonyms: string[];
-    antonyms: string[];
+    example?: string;
+    synonyms?: string[];
+    antonyms?: string[];
 }
 export {Word, Category, User, DictionaryResponse};
