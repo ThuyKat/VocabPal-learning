@@ -122,7 +122,79 @@
 
 ---
 
-## Session 4 — [DATE]
+## Session 4 — February 2, 2026
+
+### What We Did
+
+1. **Reviewed SCRUM-7 (Define TypeScript interfaces)**
+   - Katie completed all 5 subtasks (SCRUM-18 to SCRUM-22)
+   - Created interfaces: Word, Category, User, DictionaryResponse, Phonetics, Meaning, Definition
+   - File: `shared/src/types/index.ts`
+
+2. **Code Review Feedback**
+   - Added feedback comments to all subtasks on Jira:
+     - SCRUM-18: Good learning notes on interface vs type, extends vs intersection
+     - SCRUM-19: Fixed `phenetics` → `phonetic`, `String` → `string`
+     - SCRUM-20: Approved - all fields correct
+     - SCRUM-21: Fixed `photoUrl` → `photoURL` (Firebase convention)
+     - SCRUM-22: Fixed `string[] | []` → `string[]`, added optional markers
+   - Added overall feedback comment on SCRUM-7
+
+3. **Katie applied fixes**
+   - All issues resolved
+   - Added export statement for all interfaces
+   - SCRUM-7 approved and complete
+
+4. **Created Project Plan in Confluence**
+   - New page: "VocabPal Project Plan"
+   - Contains: Tech stack, 4-sprint breakdown, architecture, feature list
+   - URL: https://katienguyen1293.atlassian.net/wiki/spaces/VP/pages/2490370
+   - **Linked to Jira Epic SCRUM-5:**
+     - Added Jira Issue macro to Confluence page content
+     - Macro format: `<ac:structured-macro ac:name="jira"><ac:parameter ac:name="key">SCRUM-5</ac:parameter></ac:structured-macro>`
+     - This creates bi-directional link: shows in Jira's "Confluence content" section
+     - Note: Generic web links (`/remotelink` API) only show in "Links" section, not "Confluence content"
+
+5. **Reorganized Confluence Session Logs**
+   - Created "Session Logs" parent folder
+   - Renamed pages to consistent format: `Session N - Mon DD, YYYY`
+   - Created missing Session 2 and Session 3 pages
+   - Structure:
+     ```
+     Session Logs/
+     ├── Session 1 - Jan 17, 2026
+     ├── Session 2 - Jan 18, 2026
+     ├── Session 3 - Jan 18, 2026
+     └── Session 4 - Feb 2, 2026
+     ```
+
+6. **Fixed API Authentication**
+   - Discovered `curl -u` doesn't handle special characters in tokens
+   - Solution: Use base64-encoded Authorization header
+   - Updated CLAUDE.md with correct curl syntax
+
+7. **Updated CLAUDE.md**
+   - Added Code Review Workflow section
+   - Added Confluence Pages reference table
+   - Updated API authentication commands
+   - Updated Session Workflow: always log activities to BOTH local and Confluence
+
+### Current Status
+
+- **Sprint:** Sprint 1 - Foundation (ACTIVE)
+- **SCRUM-6:** Done ✓
+- **SCRUM-7:** Done ✓
+- **Next Story:** SCRUM-8 (Create Firebase project)
+- **Blocked:** Nothing
+
+### Next Steps
+
+1. Start SCRUM-8 (Create Firebase project)
+2. Begin with SCRUM-23 (Learn: What is Firebase?)
+
+---
+
+## Session 5 — [DATE]
 
 *To be filled in next session*
 
