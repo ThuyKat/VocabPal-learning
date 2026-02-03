@@ -31,3 +31,7 @@ extension/*.zip
 
 # Firebase
 .firebase/
+
+#AI
+CLAUDE.md 
+docs/ 
