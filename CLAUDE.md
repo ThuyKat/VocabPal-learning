@@ -106,11 +106,13 @@ A vocabulary learning tool:
 ## Commands
 
 ```bash
-# Jira API (credentials in .env)
-# Use curl with: -u "$JIRA_EMAIL:$JIRA_API_TOKEN"
+# API Authentication (credentials in .env)
+# Use base64 encoded header (more reliable than -u flag):
+source .env && TOKEN_B64=$(echo -n "$JIRA_EMAIL:$JIRA_API_TOKEN" | base64)
+curl -H "Authorization: Basic $TOKEN_B64" "URL_HERE"
 
-# Confluence API
-# Same credentials, base URL: https://katienguyen1293.atlassian.net/wiki/rest/api/
+# Jira API base: https://katienguyen1293.atlassian.net/rest/api/3/
+# Confluence API base: https://katienguyen1293.atlassian.net/wiki/rest/api/
 
 # Project commands (once set up)
 npm install        # Install all workspace dependencies
@@ -128,9 +130,16 @@ npm run lint       # Run ESLint
 3. Check Jira for current sprint/tickets
 4. Continue from where we left off
 
-**At session end (or after significant work):**
-1. Update `docs/SESSION_LOG.md` with what was done
-2. Note current status and next steps
+**During session:**
+- Log ALL activities performed (code reviews, Confluence updates, Jira changes, fixes, etc.)
+- When Katie asks Claude to do something, add it to the session log
+
+**At session end (or when Katie asks):**
+1. Update `docs/SESSION_LOG.md` locally with everything done
+2. Update Confluence session log page (same content)
+3. Note current status and next steps
+
+**IMPORTANT:** Always update BOTH local and Confluence session logs together
 
 ---
 
@@ -139,14 +148,37 @@ npm run lint       # Run ESLint
 When reviewing Katie's completed tickets:
 
 1. **Check the code** - Verify the implementation works correctly
-2. **If changes needed** - Make the fix, then document it:
-   - Add a Jira comment with `[Code Review - Changes Made]` header
-   - List all files modified/created/deleted
-   - Explain WHY the change was needed
-   - Include a learning note for future reference
-3. **Answer questions** - If Katie left questions in comments, reply on the same ticket
-4. **Update descriptions** - If original instructions were wrong/outdated, update the ticket description
-5. **Give feedback** - After review, provide overall feedback and save to `docs/FEEDBACK_TO_KATIE.md`:
-   - What was done well
-   - Areas for improvement
-   - Tips for next time
+2. **Comment on each subtask** - Add Jira comment with feedback:
+   - Use `[Code Review Feedback]` for approved work
+   - Use `[Code Review - Changes Needed]` if fixes required
+   - Be specific about what's good and what needs fixing
+3. **If changes needed** - Document what to fix:
+   - List specific issues (typos, bugs, missing exports, etc.)
+   - Explain WHY the change is needed (learning opportunity)
+4. **Comment on parent story** - After all subtasks reviewed:
+   - Add overall feedback with `[Code Review - APPROVED]` or `[Code Review - Changes Needed]`
+   - Include "What went well" and "Tips for next time"
+5. **Answer questions** - If Katie left questions in comments, reply on the same ticket
+6. **Update session log** - After code review is complete:
+   - Update `docs/SESSION_LOG.md` locally
+   - Update Confluence session log page
+   - Include: tickets reviewed, issues found, fixes applied
+
+---
+
+## Confluence Pages
+
+| Page | Purpose |
+|------|---------|
+| VocabPal Learning Project Home | Space homepage |
+| Project Overview | What VocabPal does |
+| Teaching Plan - 4 Sprint Structure | Sprint breakdown |
+| VocabPal Project Plan | Full project plan with status |
+| How the Jira Project Was Set Up | Jira setup documentation |
+| **Session Logs/** | Folder for all session logs |
+| └─ Session 1 - Jan 17, 2026 | Project setup, Jira, Confluence |
+| └─ Session 2 - Jan 18, 2026 | SCRUM-11 to SCRUM-15, ESLint fix |
+| └─ Session 3 - Jan 18, 2026 | SCRUM-6 closed |
+| └─ Session 4 - Feb 2, 2026 | SCRUM-7 review session |
+
+**Naming convention for session logs:** `Session N - Mon DD, YYYY`
