@@ -194,7 +194,53 @@
 
 ---
 
-## Session 5 — [DATE]
+## Session 5 — February 3, 2026
+
+### What We Did
+
+1. **Reviewed SCRUM-8 (Create Firebase project)**
+   - Katie completed all 6 subtasks (SCRUM-23 to SCRUM-28)
+   - Console setup tasks (SCRUM-23 to SCRUM-27) all approved
+   - SCRUM-28 (Install Firebase SDK and create config file) needed two fixes:
+     - Missing `vite-env.d.ts` type declaration file (TypeScript didn't know about `import.meta.env`)
+     - Missing trailing newline in `config.ts`
+
+2. **Code Review Feedback Posted**
+   - Added review comments to all subtasks (SCRUM-23 to SCRUM-28) on Jira
+   - Added overall review comment on SCRUM-8
+   - SCRUM-23: Good Firebase learning notes — approved
+   - SCRUM-24: Firebase project created — approved
+   - SCRUM-25: Google Auth enabled — approved
+   - SCRUM-26: Firestore database created — approved
+   - SCRUM-27: Web app registered, config in .env — approved
+   - SCRUM-28: Changes requested → Katie fixed → approved
+
+3. **Katie Applied Fixes**
+   - Created `shared/src/vite-env.d.ts` with ImportMetaEnv and ImportMeta type declarations
+   - Added trailing newline to `shared/src/firebase/config.ts`
+   - SCRUM-28 approved after fixes
+
+4. **Jira Updates**
+   - SCRUM-28 transitioned to Done
+   - SCRUM-8 transitioned to Done
+
+### Current Status
+
+- **Sprint:** Sprint 1 - Foundation (ACTIVE)
+- **SCRUM-6:** Done ✓
+- **SCRUM-7:** Done ✓
+- **SCRUM-8:** Done ✓
+- **Next Story:** SCRUM-9 (Implement Dictionary API adapter)
+- **Blocked:** Nothing
+
+### Next Steps
+
+1. Start SCRUM-9 (Implement Dictionary API adapter)
+2. Begin with SCRUM-29 (first subtask of SCRUM-9)
+
+---
+
+## Session 6 — [DATE]
 
 *To be filled in next session*
 
