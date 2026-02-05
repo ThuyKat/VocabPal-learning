@@ -4,6 +4,18 @@
 
 ---
 
+## CRITICAL REMINDER
+
+**After EVERY significant action, update `docs/SESSION_LOG.md`:**
+- Code review completed? → Update session log
+- Jira ticket transitioned? → Update session log
+- Fixed a bug or answered a question? → Update session log
+- Created/modified files? → Update session log
+
+**Do NOT wait until the end of the session. Log as you go.**
+
+---
+
 ## Project Context
 
 **What:** Rebuilding VocabPal from scratch as a learning exercise.
@@ -131,8 +143,9 @@ npm run lint       # Run ESLint
 4. Continue from where we left off
 
 **During session:**
-- Log ALL activities performed (code reviews, Confluence updates, Jira changes, fixes, etc.)
-- When Katie asks Claude to do something, add it to the session log
+- **UPDATE SESSION LOG IMMEDIATELY** after completing any task (don't batch updates!)
+- Log ALL activities: code reviews, Jira transitions, fixes, questions answered, files created/renamed
+- When Katie asks Claude to do something, add it to the session log right after doing it
 - **All work must have a Jira ticket** — before starting any new task (fix, feature, refactor), check if a ticket exists. If not, create one first. This ensures all work is tracked and pre-defined.
 
 **At session end (or when Katie asks):**
@@ -181,5 +194,7 @@ When reviewing Katie's completed tickets:
 | └─ Session 2 - Jan 18, 2026 | SCRUM-11 to SCRUM-15, ESLint fix |
 | └─ Session 3 - Jan 18, 2026 | SCRUM-6 closed |
 | └─ Session 4 - Feb 2, 2026 | SCRUM-7 review session |
+| └─ Session 5 - Feb 3, 2026 | SCRUM-8 review and completion |
+| └─ Session 6 - Feb 5, 2026 | SCRUM-9 review and completion |
 
 **Naming convention for session logs:** `Session N - Mon DD, YYYY`
