@@ -240,7 +240,62 @@
 
 ---
 
-## Session 6 — [DATE]
+## Session 6 — February 5, 2026
+
+### What We Did
+
+1. **Reviewed SCRUM-9 (Implement Dictionary API adapter)**
+   - Katie completed all 6 subtasks (SCRUM-29 to SCRUM-33, SCRUM-39)
+   - Code review on SCRUM-39 (DictionaryAdapter implementation)
+
+2. **Code Review Feedback on SCRUM-39**
+   - Issues found:
+     - Missing `interface` declaration (created class instead of interface)
+     - Used `extends` instead of `implements`
+     - Missing exports
+     - Extra space in class name
+   - Katie asked about interfaces having methods → explained that interfaces declare method signatures (contract), classes provide implementation
+   - Posted answer to Jira
+
+3. **Katie Applied Fixes**
+   - Created `DictionaryAdapter` interface in `types/index.ts`
+   - Changed `FreeDictionaryAdapter` to use `implements DictionaryAdapter`
+   - Added exports
+   - SCRUM-39 approved and transitioned to Done
+
+4. **Completed SCRUM-33 (Manual Testing)**
+   - Wrote test file `DictionaryAdapter.test.ts`
+   - Discovered `ts-node` fails silently with ESM modules
+   - Used `tsx` instead - tests passed
+   - Posted test results and ts-node vs tsx explanation to Jira
+   - SCRUM-33 transitioned to Done
+
+5. **Closed SCRUM-9**
+   - All subtasks complete
+   - Added completion comment
+   - Transitioned to Done
+
+6. **File Rename**
+   - Renamed `dictionaryApi.test.ts` → `DictionaryAdapter.test.ts` to match content
+
+### Current Status
+
+- **Sprint:** Sprint 1 - Foundation (ACTIVE)
+- **SCRUM-6:** Done ✓
+- **SCRUM-7:** Done ✓
+- **SCRUM-8:** Done ✓
+- **SCRUM-9:** Done ✓
+- **SCRUM-10:** To Do
+- **Blocked:** Nothing
+
+### Next Steps
+
+1. Start SCRUM-10 (Create Firebase service utilities)
+2. Begin with first subtask of SCRUM-10
+
+---
+
+## Session 7 — [DATE]
 
 *To be filled in next session*
 
