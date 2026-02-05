@@ -23,3 +23,4 @@ class FreeDictionaryAdapter implements DictionaryAdapter{
 }
 export default FreeDictionaryAdapter;
 
+
