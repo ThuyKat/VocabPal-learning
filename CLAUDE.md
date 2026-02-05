@@ -133,6 +133,7 @@ npm run lint       # Run ESLint
 **During session:**
 - Log ALL activities performed (code reviews, Confluence updates, Jira changes, fixes, etc.)
 - When Katie asks Claude to do something, add it to the session log
+- **All work must have a Jira ticket** — before starting any new task (fix, feature, refactor), check if a ticket exists. If not, create one first. This ensures all work is tracked and pre-defined.
 
 **At session end (or when Katie asks):**
 1. Update `docs/SESSION_LOG.md` locally with everything done
