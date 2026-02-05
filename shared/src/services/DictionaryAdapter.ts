@@ -1,7 +1,8 @@
-import { Word } from "../types";
+import { Word, DictionaryAdapter } from "../types";
 import { fetchWordDefinition } from "./dictionaryApi";
 import { transformToWord } from "./transformWord";
-class DictionaryAdapter{
+
+class FreeDictionaryAdapter implements DictionaryAdapter{
     private userId: string;
     private sourceUrl?: string;
 
@@ -20,9 +21,5 @@ class DictionaryAdapter{
         return transformToWord(apiResponse, this.userId, this.sourceUrl);
     };
 }
+export default FreeDictionaryAdapter;
 
-class  FreeDictionaryAdapter extends DictionaryAdapter {
-    constructor(userId: string, sourceUrl?: string) {
-        super(userId, sourceUrl);
-    }
-}

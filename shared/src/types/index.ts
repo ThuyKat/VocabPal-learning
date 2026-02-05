@@ -49,5 +49,7 @@ interface Definition{
     synonyms?: string[];
     antonyms?: string[];
 }
-
-export {Word, Category, User, DictionaryResponse};
+interface DictionaryAdapter{
+    lookup(word: string): Promise<Omit<Word, 'id'|'createdAt'|'updatedAt'>>;
+}
+export {Word, Category, User, DictionaryResponse, DictionaryAdapter};
