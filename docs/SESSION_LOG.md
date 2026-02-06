@@ -295,7 +295,66 @@
 
 ---
 
-## Session 7 — [DATE]
+## Session 7 — February 7, 2026
+
+### What We Did
+
+1. **Code Review SCRUM-34 (Learn: Firestore CRUD operations)**
+   - Reviewed Katie's learning notes — excellent documentation of all Firestore functions
+   - Posted approval comment to Jira
+
+2. **Code Review SCRUM-35 (Create wordService.ts with CRUD operations)**
+   - Katie completed wordService.ts with all 5 CRUD operations
+
+   **Round 1 - Initial review found 4 issues:**
+   1. ❌ `id: data.id` should be `id: snapshot.id` — document ID is metadata, not in data
+   2. ❌ Missing timestamps in `toFirestore()` — timestamps not being saved to Firestore
+   3. ❌ `updateWord` missing `updatedAt` — should auto-set on updates
+   4. ❌ Type mismatch: `QueryDocumentSnapshot` should be `DocumentSnapshot`
+
+   **Round 2 - Katie fixed 2 of 4:**
+   - ✅ Fixed `id: snapshot.id`
+   - ✅ Fixed type to `DocumentSnapshot`
+   - ❌ Still missing: timestamps not written to Firestore
+   - ❌ Still missing: `updateWord` doesn't set `updatedAt`
+
+   **Katie's question:** "Doesn't Firestore auto-generate timestamps?"
+   - Answer: NO! Firestore only auto-generates document IDs, not timestamps
+   - Added learning note to SCRUM-34 clarifying `Omit` controls caller input, not what's written to DB
+
+   **Round 3 - Katie added `serverTimestamp()`:**
+   - ✅ Added `serverTimestamp()` in `toFirestore()`
+   - ❌ NEW issue: `updateWord` uses `toFirestore()` which overwrites `createdAt` on every update!
+
+   **Round 4 - Final fixes:**
+   - ✅ `updateWord` now directly sets only `updatedAt: serverTimestamp()`
+   - ✅ `fromFirestore` uses `.toDate()` for Firestore Timestamps
+   - ✅ Minor: `new Date(data.createdAt?.toDate())` is redundant but works
+
+   **SCRUM-35 approved and transitioned to Done**
+
+### Current Status
+
+- **Sprint:** Sprint 1 - Foundation (ACTIVE)
+- **SCRUM-6:** Done ✓
+- **SCRUM-7:** Done ✓
+- **SCRUM-8:** Done ✓
+- **SCRUM-9:** Done ✓
+- **SCRUM-10:** In Progress
+  - SCRUM-34: Done ✓
+  - SCRUM-35: Done ✓
+  - SCRUM-36, 37, 38: To Do
+- **Blocked:** Nothing
+
+### Next Steps
+
+1. Continue with SCRUM-36 (categoryService.ts)
+2. Then SCRUM-37 (authService.ts)
+3. Then SCRUM-38 (export all services)
+
+---
+
+## Session 8 — [DATE]
 
 *To be filled in next session*
 
