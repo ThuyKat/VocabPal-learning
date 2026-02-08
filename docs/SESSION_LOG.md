@@ -333,6 +333,12 @@
 
    **SCRUM-35 approved and transitioned to Done**
 
+3. **Katie's Question: Why use `as` type assertion in wordService.ts?**
+   - Katie asked about line 19: `const data = snapshot.data(options||{}) as Omit<Word, ...>`
+   - Explained: `snapshot.data()` returns generic `DocumentData | undefined`, TypeScript doesn't know the shape
+   - Type assertion tells TypeScript what fields exist so we can access `data.word`, `data.definition`, etc.
+   - Added learning note as comment on SCRUM-10
+
 ### Current Status
 
 - **Sprint:** Sprint 1 - Foundation (ACTIVE)
@@ -354,7 +360,76 @@
 
 ---
 
-## Session 8 — [DATE]
+## Session 8 — February 8, 2026
+
+### What We Did
+
+1. **Java Concepts Deep Dive (Learning Discussion)**
+
+   Katie initiated a discussion about Java OOP concepts to solidify understanding. Topics covered:
+
+   **Interface vs Abstract Class:**
+   | Use Interface When | Use Abstract Class When |
+   |-------------------|------------------------|
+   | Need multiple inheritance | Need shared state (instance fields) |
+   | Defining a contract/capability | Have partial implementation |
+   | Want loose coupling | Need constructors |
+   | "Can do" relationship | "Is a" relationship |
+
+   **Key Learnings:**
+   - Abstract class CAN implement an interface (common pattern!)
+   - Interface fields are always `public static final` (constants only)
+   - Abstract classes can have any type of field (static, instance, mutable)
+   - Default methods in interfaces provide shared behavior but can't access instance state
+
+   **Java Modifiers:**
+   - Access modifiers: `public`, `private`, `protected`, (default)
+   - Non-access modifiers: `static`, `final`, `abstract`, `synchronized`, `volatile`, `transient`
+   - `static` = belongs to class (shared across instances, mutable)
+   - `static final` = belongs to class (constant, immutable)
+
+   **Interface Decision Flow:**
+   ```
+   Need multiple inheritance?     → Interface
+   Need instance fields?          → Abstract class
+   Just defining a contract?      → Interface
+   Need constructor?              → Abstract class
+   "Can do" capability?           → Interface
+   "Is a" relationship?           → Abstract class
+   Both could work?               → Interface (more flexible)
+   ```
+
+2. **Career & Learning Discussion**
+
+   - Discussed relevance of Java in AI era
+   - Java still dominates: enterprise, banking, Android, big data (Hadoop/Spark/Kafka)
+   - Python dominates AI/ML; TypeScript for web
+   - Katie's learning approach: understanding "why" deeply rather than surface-level memorization
+   - This approach differentiates developers — deep knowledge is rare
+
+3. **Katie's Summary of Interface Usage:**
+   - Loose coupling
+   - Multiple inheritance of patterns/structures
+   - Shared utility implementation via default methods
+   - Can be extended by abstract class
+   - Abstract class better when methods need instance fields
+
+### Current Status
+
+- **Sprint:** Sprint 1 - Foundation (ACTIVE)
+- **SCRUM-10:** In Progress (SCRUM-34, SCRUM-35 done; SCRUM-36, 37, 38 remaining)
+- **Blocked:** Nothing
+- **Note:** This was a learning/discussion session, no code changes
+
+### Next Steps
+
+1. Continue with SCRUM-36 (categoryService.ts)
+2. Then SCRUM-37 (authService.ts)
+3. Then SCRUM-38 (export all services)
+
+---
+
+## Session 9 — [DATE]
 
 *To be filled in next session*
 
