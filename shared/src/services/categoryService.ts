@@ -41,15 +41,22 @@ export async function createCategory(category: Omit<Category, 'id' | 'createdAt'
 
 // Get all categories for a user
 export async function getCategoriesByUser(userId: string): Promise<Category[]>{
-
+    //query Firestore for categories where userId matches and return an array of Category objects
+    const q = query(collection(db, "categories"), where("userId", "==", userId));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map((doc) => categoryConverter.fromFirestore(doc));
 }
 // Update a category
 export async function updateCategory(categoryId: string, updates: Partial<Category>): Promise<void>{
-
+    const docRef = doc(db, "categories", categoryId);
+    await updateDoc(docRef, {
+        ...updates,
+        updatedAt: serverTimestamp(),
+    });
 }
+
 // Delete a category
 export async function deleteCategory(categoryId: string): Promise<void>{
-
+    const docRef = doc(db, "categories", categoryId);
+    await deleteDoc(docRef);
 }
-}
-
