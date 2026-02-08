@@ -16,7 +16,7 @@ const wordConverter = {
         };
     },
     fromFirestore(snapshot: DocumentSnapshot, options?: SnapshotOptions): Word {
-        const data = snapshot.data(options||{}) as Omit<Word, 'id' | 'createdAt' | 'updatedAt'> & { createdAt: any; updatedAt: any };
+        const data = snapshot.data(options||{}) as Omit<Word, 'id' | 'createdAt' | 'updatedAt'> & { createdAt: any; updatedAt: any }; // type assertion to bypass TypeScript compile time error
             return {
                 id: snapshot.id,
                 word: data.word,
