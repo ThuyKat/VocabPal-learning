@@ -295,8 +295,203 @@
 
 ---
 
-## Session 7 — [DATE]
+## Session 7 — February 7, 2026
 
-*To be filled in next session*
+### What We Did
+
+1. **Code Review SCRUM-34 (Learn: Firestore CRUD operations)**
+   - Reviewed Katie's learning notes — excellent documentation of all Firestore functions
+   - Posted approval comment to Jira
+
+2. **Code Review SCRUM-35 (Create wordService.ts with CRUD operations)**
+   - Katie completed wordService.ts with all 5 CRUD operations
+
+   **Round 1 - Initial review found 4 issues:**
+   1. ❌ `id: data.id` should be `id: snapshot.id` — document ID is metadata, not in data
+   2. ❌ Missing timestamps in `toFirestore()` — timestamps not being saved to Firestore
+   3. ❌ `updateWord` missing `updatedAt` — should auto-set on updates
+   4. ❌ Type mismatch: `QueryDocumentSnapshot` should be `DocumentSnapshot`
+
+   **Round 2 - Katie fixed 2 of 4:**
+   - ✅ Fixed `id: snapshot.id`
+   - ✅ Fixed type to `DocumentSnapshot`
+   - ❌ Still missing: timestamps not written to Firestore
+   - ❌ Still missing: `updateWord` doesn't set `updatedAt`
+
+   **Katie's question:** "Doesn't Firestore auto-generate timestamps?"
+   - Answer: NO! Firestore only auto-generates document IDs, not timestamps
+   - Added learning note to SCRUM-34 clarifying `Omit` controls caller input, not what's written to DB
+
+   **Round 3 - Katie added `serverTimestamp()`:**
+   - ✅ Added `serverTimestamp()` in `toFirestore()`
+   - ❌ NEW issue: `updateWord` uses `toFirestore()` which overwrites `createdAt` on every update!
+
+   **Round 4 - Final fixes:**
+   - ✅ `updateWord` now directly sets only `updatedAt: serverTimestamp()`
+   - ✅ `fromFirestore` uses `.toDate()` for Firestore Timestamps
+   - ✅ Minor: `new Date(data.createdAt?.toDate())` is redundant but works
+
+   **SCRUM-35 approved and transitioned to Done**
+
+3. **Katie's Question: Why use `as` type assertion in wordService.ts?**
+   - Katie asked about line 19: `const data = snapshot.data(options||{}) as Omit<Word, ...>`
+   - Explained: `snapshot.data()` returns generic `DocumentData | undefined`, TypeScript doesn't know the shape
+   - Type assertion tells TypeScript what fields exist so we can access `data.word`, `data.definition`, etc.
+   - Added learning note as comment on SCRUM-10
+
+### Current Status
+
+- **Sprint:** Sprint 1 - Foundation (ACTIVE)
+- **SCRUM-6:** Done ✓
+- **SCRUM-7:** Done ✓
+- **SCRUM-8:** Done ✓
+- **SCRUM-9:** Done ✓
+- **SCRUM-10:** In Progress
+  - SCRUM-34: Done ✓
+  - SCRUM-35: Done ✓
+  - SCRUM-36, 37, 38: To Do
+- **Blocked:** Nothing
+
+### Next Steps
+
+1. Continue with SCRUM-36 (categoryService.ts)
+2. Then SCRUM-37 (authService.ts)
+3. Then SCRUM-38 (export all services)
+
+---
+
+## Session 8 — February 8, 2026
+
+### What We Did
+
+1. **Java Concepts Deep Dive (Learning Discussion)**
+
+   Katie initiated a discussion about Java OOP concepts to solidify understanding. Topics covered:
+
+   **Interface vs Abstract Class:**
+   | Use Interface When | Use Abstract Class When |
+   |-------------------|------------------------|
+   | Need multiple inheritance | Need shared state (instance fields) |
+   | Defining a contract/capability | Have partial implementation |
+   | Want loose coupling | Need constructors |
+   | "Can do" relationship | "Is a" relationship |
+
+   **Key Learnings:**
+   - Abstract class CAN implement an interface (common pattern!)
+   - Interface fields are always `public static final` (constants only)
+   - Abstract classes can have any type of field (static, instance, mutable)
+   - Default methods in interfaces provide shared behavior but can't access instance state
+
+   **Java Modifiers:**
+   - Access modifiers: `public`, `private`, `protected`, (default)
+   - Non-access modifiers: `static`, `final`, `abstract`, `synchronized`, `volatile`, `transient`
+   - `static` = belongs to class (shared across instances, mutable)
+   - `static final` = belongs to class (constant, immutable)
+
+   **Interface Decision Flow:**
+   ```
+   Need multiple inheritance?     → Interface
+   Need instance fields?          → Abstract class
+   Just defining a contract?      → Interface
+   Need constructor?              → Abstract class
+   "Can do" capability?           → Interface
+   "Is a" relationship?           → Abstract class
+   Both could work?               → Interface (more flexible)
+   ```
+
+2. **Career & Learning Discussion**
+
+   - Discussed relevance of Java in AI era
+   - Java still dominates: enterprise, banking, Android, big data (Hadoop/Spark/Kafka)
+   - Python dominates AI/ML; TypeScript for web
+   - Katie's learning approach: understanding "why" deeply rather than surface-level memorization
+   - This approach differentiates developers — deep knowledge is rare
+
+3. **Katie's Summary of Interface Usage:**
+   - Loose coupling
+   - Multiple inheritance of patterns/structures
+   - Shared utility implementation via default methods
+   - Can be extended by abstract class
+   - Abstract class better when methods need instance fields
+
+### Current Status
+
+- **Sprint:** Sprint 1 - Foundation (ACTIVE)
+- **SCRUM-10:** In Progress (SCRUM-34, SCRUM-35 done; SCRUM-36, 37, 38 remaining)
+- **Blocked:** Nothing
+- **Note:** This was a learning/discussion session, no code changes
+
+### Next Steps
+
+1. Continue with SCRUM-36 (categoryService.ts)
+2. Then SCRUM-37 (authService.ts)
+3. Then SCRUM-38 (export all services)
+
+---
+
+## Session 9 — February 10, 2026
+
+### What We Did
+
+1. **Code Review SCRUM-36 (categoryService.ts)**
+   - Initial review found 2 issues:
+     - `toFireStore` typo → should be `toFirestore`
+     - Missing `updatedAt` in Omit for createCategory signature
+   - Katie fixed both issues
+   - Added export keywords to all functions
+   - SCRUM-36 approved and transitioned to Done
+
+2. **Code Review SCRUM-37 (authService.ts)**
+   - Initial review: implementation was good
+   - Only issue: missing trailing newline (already fixed)
+   - Good patterns:
+     - GoogleAuthProvider usage
+     - onAuthStateChange subscription pattern
+     - Proper error handling
+   - SCRUM-37 approved and transitioned to Done
+
+3. **Code Review SCRUM-38 (index.ts exports)**
+   - Katie created barrel export file
+   - Initial issue: removed `export` keywords from service files
+   - Explained: `export *` only re-exports things already exported
+   - Katie fixed by adding `export` back to all functions
+   - SCRUM-38 approved and transitioned to Done
+
+4. **Closed SCRUM-10 (Create Firebase service utilities)**
+   - All 5 subtasks complete (SCRUM-34 to SCRUM-38)
+   - Transitioned to Done
+
+5. **Sprint 1 Complete!**
+   - All 5 stories done:
+     - SCRUM-6: Set up monorepo ✓
+     - SCRUM-7: TypeScript interfaces ✓
+     - SCRUM-8: Firebase project ✓
+     - SCRUM-9: Dictionary API adapter ✓
+     - SCRUM-10: Firebase services ✓
+
+6. **Deep Dive: Auth Patterns (SCRUM-37 discussion)**
+   - Answered Katie's questions about onAuthStateChange:
+     - Why it's different from getCurrentUser (async vs sync)
+     - How React apps use useEffect + subscription pattern
+     - Why variable is named `unsubscribe` (name by what it DOES)
+     - How to build custom Observer pattern without Firebase
+     - Race conditions: subscribe to state, don't check synchronously
+   - Updated CLAUDE.md workflow: read comments BEFORE approving
+
+### Current Status
+
+- **Sprint:** Sprint 1 - Foundation (COMPLETE!)
+- **SCRUM-6:** Done ✓
+- **SCRUM-7:** Done ✓
+- **SCRUM-8:** Done ✓
+- **SCRUM-9:** Done ✓
+- **SCRUM-10:** Done ✓
+- **Blocked:** Nothing
+
+### Next Steps
+
+1. Start Sprint 2 - Chrome Extension
+2. Create stories and subtasks for Sprint 2
+3. Begin with Manifest V3 and content scripts
 
 ---

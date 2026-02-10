@@ -18,6 +18,7 @@ interface Category{
     color?:string;
     userId:string;
     createdAt: Date;
+    updatedAt: Date;
 }
 
 interface User{
@@ -52,4 +53,5 @@ interface Definition{
 interface DictionaryAdapter{
     lookup(word: string): Promise<Omit<Word, 'id'|'createdAt'|'updatedAt'>>;
 }
+
 export {Word, Category, User, DictionaryResponse, DictionaryAdapter};

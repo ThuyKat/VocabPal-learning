@@ -55,6 +55,9 @@
 ### Confluence
 - **Space:** VocabPal Learning Project (key: VP)
 - **URL:** https://katienguyen1293.atlassian.net/wiki/spaces/VP
+- **Access Method:** Use API token from `.env` with curl (NOT the MCP integration)
+  - The MCP AtlassianMCP tool connects to a different site (katiestudyplan)
+  - For VocabPal Confluence, always use direct curl with the `.env` credentials
 
 ---
 
@@ -161,19 +164,20 @@ npm run lint       # Run ESLint
 
 When reviewing Katie's completed tickets:
 
-1. **Check the code** - Verify the implementation works correctly
-2. **Comment on each subtask** - Add Jira comment with feedback:
+1. **Read existing comments FIRST** - Check for questions Katie left on the ticket before reviewing
+2. **Check the code** - Verify the implementation works correctly
+3. **Answer any questions** - Reply to Katie's questions on the same ticket BEFORE posting approval
+4. **Comment on each subtask** - Add Jira comment with feedback:
    - Use `[Code Review Feedback]` for approved work
    - Use `[Code Review - Changes Needed]` if fixes required
    - Be specific about what's good and what needs fixing
-3. **If changes needed** - Document what to fix:
+5. **If changes needed** - Document what to fix:
    - List specific issues (typos, bugs, missing exports, etc.)
    - Explain WHY the change is needed (learning opportunity)
-4. **Comment on parent story** - After all subtasks reviewed:
+6. **Comment on parent story** - After all subtasks reviewed:
    - Add overall feedback with `[Code Review - APPROVED]` or `[Code Review - Changes Needed]`
    - Include "What went well" and "Tips for next time"
-5. **Answer questions** - If Katie left questions in comments, reply on the same ticket
-6. **Update session log** - After code review is complete:
+7. **Update session log** - After code review is complete:
    - Update `docs/SESSION_LOG.md` locally
    - Update Confluence session log page
    - Include: tickets reviewed, issues found, fixes applied
@@ -196,5 +200,7 @@ When reviewing Katie's completed tickets:
 | └─ Session 4 - Feb 2, 2026 | SCRUM-7 review session |
 | └─ Session 5 - Feb 3, 2026 | SCRUM-8 review and completion |
 | └─ Session 6 - Feb 5, 2026 | SCRUM-9 review and completion |
+| └─ Session 7 - Feb 7, 2026 | SCRUM-10 started, wordService review |
+| └─ Session 8 - Feb 8, 2026 | Java concepts discussion |
 
 **Naming convention for session logs:** `Session N - Mon DD, YYYY`
