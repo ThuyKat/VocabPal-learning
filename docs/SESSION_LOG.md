@@ -429,8 +429,69 @@
 
 ---
 
-## Session 9 — [DATE]
+## Session 9 — February 10, 2026
 
-*To be filled in next session*
+### What We Did
+
+1. **Code Review SCRUM-36 (categoryService.ts)**
+   - Initial review found 2 issues:
+     - `toFireStore` typo → should be `toFirestore`
+     - Missing `updatedAt` in Omit for createCategory signature
+   - Katie fixed both issues
+   - Added export keywords to all functions
+   - SCRUM-36 approved and transitioned to Done
+
+2. **Code Review SCRUM-37 (authService.ts)**
+   - Initial review: implementation was good
+   - Only issue: missing trailing newline (already fixed)
+   - Good patterns:
+     - GoogleAuthProvider usage
+     - onAuthStateChange subscription pattern
+     - Proper error handling
+   - SCRUM-37 approved and transitioned to Done
+
+3. **Code Review SCRUM-38 (index.ts exports)**
+   - Katie created barrel export file
+   - Initial issue: removed `export` keywords from service files
+   - Explained: `export *` only re-exports things already exported
+   - Katie fixed by adding `export` back to all functions
+   - SCRUM-38 approved and transitioned to Done
+
+4. **Closed SCRUM-10 (Create Firebase service utilities)**
+   - All 5 subtasks complete (SCRUM-34 to SCRUM-38)
+   - Transitioned to Done
+
+5. **Sprint 1 Complete!**
+   - All 5 stories done:
+     - SCRUM-6: Set up monorepo ✓
+     - SCRUM-7: TypeScript interfaces ✓
+     - SCRUM-8: Firebase project ✓
+     - SCRUM-9: Dictionary API adapter ✓
+     - SCRUM-10: Firebase services ✓
+
+6. **Deep Dive: Auth Patterns (SCRUM-37 discussion)**
+   - Answered Katie's questions about onAuthStateChange:
+     - Why it's different from getCurrentUser (async vs sync)
+     - How React apps use useEffect + subscription pattern
+     - Why variable is named `unsubscribe` (name by what it DOES)
+     - How to build custom Observer pattern without Firebase
+     - Race conditions: subscribe to state, don't check synchronously
+   - Updated CLAUDE.md workflow: read comments BEFORE approving
+
+### Current Status
+
+- **Sprint:** Sprint 1 - Foundation (COMPLETE!)
+- **SCRUM-6:** Done ✓
+- **SCRUM-7:** Done ✓
+- **SCRUM-8:** Done ✓
+- **SCRUM-9:** Done ✓
+- **SCRUM-10:** Done ✓
+- **Blocked:** Nothing
+
+### Next Steps
+
+1. Start Sprint 2 - Chrome Extension
+2. Create stories and subtasks for Sprint 2
+3. Begin with Manifest V3 and content scripts
 
 ---

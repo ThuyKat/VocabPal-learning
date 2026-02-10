@@ -18,7 +18,7 @@ const categoryConverter = {
         };
     },
     // Convert the Category object to the format expected by Firestore
-     toFireStore : (category: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>) => {
+     toFirestore : (category: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>) => {
         return {
             ...category,
             createdAt: serverTimestamp(),
@@ -28,9 +28,9 @@ const categoryConverter = {
 }
 
 // Create a new category
-export async function createCategory(category: Omit<Category, 'id' | 'createdAt'>): Promise<Category>{
+export async function createCategory(category: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>): Promise<Category>{
         // Implementation to add category to Firestore and return the created category with id and timestamps
-        const docRef = await addDoc(collection(db, "categories"), categoryConverter.toFireStore(category));
+        const docRef = await addDoc(collection(db, "categories"), categoryConverter.toFirestore(category));
         return {
             id: docRef.id,
             ...category,
