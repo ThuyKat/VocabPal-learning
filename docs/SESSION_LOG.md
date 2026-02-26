@@ -488,10 +488,375 @@
 - **SCRUM-10:** Done ✓
 - **Blocked:** Nothing
 
+7. **Created Sprint 2 - Chrome Extension**
+   - Created Sprint 2 in Jira (ID: 36)
+   - Created 4 stories with detailed subtasks:
+
+   **SCRUM-40: Set up Chrome Extension project (6 subtasks)**
+   - SCRUM-41: Learn Chrome Extension architecture and Manifest V3
+   - SCRUM-42: Create manifest.json with Manifest V3 format
+   - SCRUM-43: Set up extension folder structure
+   - SCRUM-44: Configure Vite for Chrome extension build
+   - SCRUM-45: Create basic popup page with React
+   - SCRUM-46: Load and test extension in Chrome
+
+   **SCRUM-47: Build popup UI with React (5 subtasks)**
+   - SCRUM-48: Learn React patterns for Chrome extensions
+   - SCRUM-49: Create WordList component
+   - SCRUM-50: Create WordCard component
+   - SCRUM-51: Style popup with Tailwind CSS
+   - SCRUM-52: Add popup header and footer with web app link
+
+   **SCRUM-53: Implement content script for word highlighting (6 subtasks)**
+   - SCRUM-54: Learn Content scripts and message passing
+   - SCRUM-55: Create content script for text selection
+   - SCRUM-56: Add context menu for saving words
+   - SCRUM-57: Add visual feedback when word saved
+   - SCRUM-58: Create service worker for background tasks
+   - SCRUM-59: Integrate dictionary API lookup
+
+   **SCRUM-60: Connect extension to Firebase (6 subtasks)**
+   - SCRUM-61: Configure OAuth client ID for extension
+   - SCRUM-62: Implement Google sign-in using chrome.identity
+   - SCRUM-63: Test complete flow end-to-end
+   - SCRUM-64: Learn Firebase Auth in Chrome extensions
+   - SCRUM-65: Wire up wordService to Firestore
+
+### Current Status
+
+- **Sprint 1:** COMPLETE ✅
+- **Sprint 2:** Created, ready to start
+- **Next ticket:** SCRUM-41 (Learn Chrome Extension architecture)
+
+8. **Compared Sprint 2 with Original VocabPal**
+   - Katie asked to verify Sprint 2 matches original VocabPal features
+   - Examined original files:
+     - `extension/src/background/index.ts` - context menu + notifications
+     - `extension/src/content/index.tsx` - floating button on text selection
+     - `extension/src/popup/components/Flashcard.tsx` - flip animation, navigation
+     - `extension/src/popup/components/WordList.tsx` - grouping by date/source
+     - `extension/src/popup/components/CategorySelect.tsx` - multi-select filtering
+
+   **Key findings - original has features I missed:**
+   - Floating "Add to VocabPal" button (in ADDITION to context menu)
+   - Flashcard component with flip animation
+   - WordList grouping by date/source
+   - CategorySelect with multi-select filtering
+
+9. **Added Missing Subtasks to Sprint 2**
+   - **SCRUM-66:** Add floating "Add to VocabPal" button on text selection (under SCRUM-53)
+   - **SCRUM-67:** Create Flashcard component with flip animation (under SCRUM-47)
+   - **SCRUM-68:** Add WordList grouping by date and source (under SCRUM-47)
+   - **SCRUM-69:** Create CategorySelect component for study filtering (under SCRUM-47)
+
+### Updated Sprint 2 Structure
+
+**SCRUM-47: Build popup UI with React (now 8 subtasks)**
+- SCRUM-48: Learn React patterns for Chrome extensions
+- SCRUM-49: Create WordList component
+- SCRUM-50: Create WordCard component
+- SCRUM-51: Style popup with Tailwind CSS
+- SCRUM-52: Add popup header and footer with web app link
+- SCRUM-67: Create Flashcard component with flip animation *(NEW)*
+- SCRUM-68: Add WordList grouping by date and source *(NEW)*
+- SCRUM-69: Create CategorySelect component for study filtering *(NEW)*
+
+**SCRUM-53: Implement content script for word highlighting (now 7 subtasks)**
+- SCRUM-54: Learn Content scripts and message passing
+- SCRUM-55: Create content script for text selection
+- SCRUM-56: Add context menu for saving words
+- SCRUM-57: Add visual feedback when word saved
+- SCRUM-58: Create service worker for background tasks
+- SCRUM-59: Integrate dictionary API lookup
+- SCRUM-66: Add floating "Add to VocabPal" button on text selection *(NEW)*
+
+10. **Updated CLAUDE.md Workflow**
+    - Added reminder to update Confluence pages on major milestones
+    - Pages to update: Project Overview, Teaching Plan, VocabPal Project Plan
+    - Added Session 9 to Confluence Pages list
+    - Updated sprint status (Sprint 1 COMPLETE, Sprint 2 ACTIVE)
+
+11. **Updated Confluence Pages**
+    - **VocabPal Project Plan** (page 2490370):
+      - Sprint 1 marked COMPLETE ✅
+      - All Sprint 1 stories marked Done
+      - Added Sprint 2 stories with subtask counts
+      - Updated Core Features section (two ways to save words)
+    - **Teaching Plan** (page 360449):
+      - Added Status column to Sprint Overview table
+      - Sprint 1 marked COMPLETE, Sprint 2 IN PROGRESS
+      - Added Sprint 2 Breakdown with all stories and subtasks
+
+### Current Status
+
+- **Sprint 1:** COMPLETE ✅
+- **Sprint 2:** Updated with 4 new subtasks to match original VocabPal
+- **Confluence:** Project Plan and Teaching Plan updated
+- **Next ticket:** SCRUM-41 (Learn Chrome Extension architecture)
+
 ### Next Steps
 
-1. Start Sprint 2 - Chrome Extension
-2. Create stories and subtasks for Sprint 2
-3. Begin with Manifest V3 and content scripts
+1. Start SCRUM-40 (Set up Chrome Extension project)
+2. Begin with SCRUM-41 (Learn about Manifest V3)
+
+---
+
+## Session 10 — February 10, 2026
+
+### What We Did
+
+1. **Discussed Testing Strategy**
+   - Katie asked: "Should I write tests now or wait until Sprint 4?"
+   - Answer: Write tests as you go, not at the end
+   - Reasons: You forget how code works, bugs compound, harder to retrofit tests
+
+2. **Created SCRUM-70 (Add unit tests for Sprint 1 services)**
+   - New story added to Sprint 2
+   - Created 5 subtasks:
+     - SCRUM-71: Set up Jest testing framework in monorepo
+     - SCRUM-72: Write unit tests for wordService
+     - SCRUM-73: Write unit tests for categoryService
+     - SCRUM-74: Write unit tests for authService
+     - SCRUM-75: Write unit tests for DictionaryAdapter
+
+3. **Installed Jest Dependencies**
+   - Ran: `npm install --save-dev jest ts-jest @types/jest`
+   - jest: Testing framework
+   - ts-jest: TypeScript support for Jest
+   - @types/jest: TypeScript type definitions
+
+4. **Added Learning Guides to All Tickets**
+   - SCRUM-71: Jest setup steps (config file, package.json script)
+   - SCRUM-72: wordService tests (mocking explained, test structure)
+   - SCRUM-73: categoryService tests (similar to wordService)
+   - SCRUM-74: authService tests (mocking Firebase Auth)
+   - SCRUM-75: DictionaryAdapter tests (mocking fetch)
+
+### Current Status
+
+- **Sprint 1:** COMPLETE ✅
+- **Sprint 2:** In Progress
+- **SCRUM-70:** To Do (testing story)
+  - SCRUM-71 ready for Katie to start
+- **Blocked:** Nothing
+
+### Next Steps
+
+1. Katie completes SCRUM-71 (create jest.config.js, update package.json)
+2. Then SCRUM-72-75 (write the actual tests)
+
+---
+
+## Session 11 — February 10, 2026 (continued)
+
+### What We Did
+
+1. **Explored Original VocabPal Project**
+   - Analyzed complete project structure to understand what needs to be rebuilt
+   - Documented all features from extension and web app
+   - Identified key components: WordCard, Flashcard, CategorySelect, Layout
+   - Noted advanced features: PDF support, multi-context, circular definition filtering
+
+2. **Created Sprint 3 - Web App (Sprint ID: 102)**
+   - Created 7 stories with 34 subtasks total:
+
+   **SCRUM-76: Set up Web App project (5 subtasks)**
+   - SCRUM-83: Learn Vite and React project structure
+   - SCRUM-84: Create web folder with Vite + React + TypeScript
+   - SCRUM-85: Install and configure Tailwind CSS
+   - SCRUM-86: Install React Router and configure routes
+   - SCRUM-87: Connect to shared package and verify build
+
+   **SCRUM-77: Create layout and navigation (4 subtasks)**
+   - SCRUM-88 to SCRUM-91
+
+   **SCRUM-78: Build Sign-in page (4 subtasks)**
+   - SCRUM-92 to SCRUM-95
+
+   **SCRUM-79: Build Words page (6 subtasks)**
+   - SCRUM-96 to SCRUM-101: Firestore sync, grouping, filtering, delete
+
+   **SCRUM-80: Build Flashcards page (5 subtasks)**
+   - SCRUM-102 to SCRUM-106: Flip animation, navigation, audio, filters
+
+   **SCRUM-81: Build Categories page (5 subtasks)**
+   - SCRUM-107 to SCRUM-111: CRUD operations, color picker, navigation
+
+   **SCRUM-82: Create reusable components (5 subtasks)**
+   - SCRUM-112 to SCRUM-116: WordCard, AddToCategoryModal, EmptyState, CategorySelect
+
+3. **Created Sprint 4 - Polish & Deploy (Sprint ID: 103)**
+   - Created 7 stories with 37 subtasks total:
+
+   **SCRUM-117: Set up testing framework (5 subtasks)**
+   - SCRUM-124 to SCRUM-128: Vitest, RTL, Firebase Emulator, Playwright
+
+   **SCRUM-118: Write tests (6 subtasks)**
+   - SCRUM-129 to SCRUM-134: Unit, component, and E2E tests
+
+   **SCRUM-119: Set up CI/CD pipeline (5 subtasks)**
+   - SCRUM-135 to SCRUM-139: GitHub Actions workflows
+
+   **SCRUM-120: Optimize performance (5 subtasks)**
+   - SCRUM-140 to SCRUM-144: Bundle analysis, code splitting, virtual scrolling
+
+   **SCRUM-121: Chrome Web Store submission (6 subtasks)**
+   - SCRUM-145 to SCRUM-150: Icons, screenshots, privacy policy, submission
+
+   **SCRUM-122: Deploy web app (5 subtasks)**
+   - SCRUM-151 to SCRUM-155: Vercel/Netlify deployment
+
+   **SCRUM-123: Documentation (5 subtasks)**
+   - SCRUM-156 to SCRUM-160: README, CONTRIBUTING, architecture, user guide
+
+4. **Updated Confluence Pages**
+   - **VocabPal Project Plan** (page 2490370): Added Sprint 3 & 4 stories with subtask counts
+   - **Teaching Plan** (page 360449): Added complete Sprint 3 & 4 breakdowns with all subtasks
+
+5. **Cleanup**
+   - Deleted duplicate "Sprint 2 - Chrome Extension 2" (Sprint ID: 69)
+
+### Summary of All Sprints
+
+| Sprint | Stories | Subtasks | Status |
+|--------|---------|----------|--------|
+| Sprint 1 - Foundation | 5 | 29 | ✅ COMPLETE |
+| Sprint 2 - Chrome Extension | 5 | 31 | 🔄 IN PROGRESS |
+| Sprint 3 - Web App | 7 | 34 | 📋 PLANNED |
+| Sprint 4 - Polish & Deploy | 7 | 37 | 📋 PLANNED |
+| **Total** | **24** | **131** | |
+
+### Current Status
+
+- **Sprint 1:** COMPLETE ✅
+- **Sprint 2:** IN PROGRESS (SCRUM-71 next)
+- **Sprint 3:** PLANNED (7 stories, 34 subtasks)
+- **Sprint 4:** PLANNED (7 stories, 37 subtasks)
+- **Confluence:** Project Plan and Teaching Plan updated
+
+6. **Added AWS Deployment Story (Bonus)**
+   - Created SCRUM-161: (Bonus) Deploy web app to AWS (S3 + CloudFront)
+   - 6 subtasks: SCRUM-162 to SCRUM-167
+   - Covers: IAM, S3 static hosting, CloudFront CDN, SSL, GitHub Actions CI/CD
+
+### Updated Sprint 4 Summary
+
+| Sprint 4 Stories | Subtasks |
+|------------------|----------|
+| SCRUM-117: Testing framework | 5 |
+| SCRUM-118: Write tests | 6 |
+| SCRUM-119: CI/CD pipeline | 5 |
+| SCRUM-120: Performance | 5 |
+| SCRUM-121: Chrome Web Store | 6 |
+| SCRUM-122: Deploy to Vercel | 5 |
+| SCRUM-123: Documentation | 5 |
+| SCRUM-161: (Bonus) AWS deployment | 6 |
+| SCRUM-169: (Bonus) Security best practices | 8 |
+| **Total** | **51** |
+
+7. **Added Sprint 3 Testing Story**
+   - Created SCRUM-168: Add tests for Sprint 3 web app components
+   - 6 subtasks: SCRUM-170 to SCRUM-175
+   - Covers: useAuth, useWords, useCategories hooks, WordCard, Flashcard, page integration tests
+
+8. **Added Security Best Practices Story (Bonus)**
+   - Created SCRUM-169: (Bonus) Implement security best practices and security testing
+   - 8 subtasks: SCRUM-176 to SCRUM-183
+   - Covers:
+     - OWASP Top 10 vulnerabilities
+     - Firebase Security Rules
+     - Content Security Policy (CSP)
+     - Input validation/sanitization
+     - npm audit and dependency scanning
+     - OWASP ZAP security testing
+
+### Final Project Summary
+
+| Sprint | Stories | Subtasks | Status |
+|--------|---------|----------|--------|
+| Sprint 1 - Foundation | 5 | 29 | ✅ COMPLETE |
+| Sprint 2 - Chrome Extension | 5 | 31 | 🔄 IN PROGRESS |
+| Sprint 3 - Web App | 8 | 40 | 📋 PLANNED |
+| Sprint 4 - Polish & Deploy | 9 | 51 | 📋 PLANNED |
+| **Total** | **27** | **151** | |
+
+### Next Steps
+
+1. Continue with Sprint 2 testing story (SCRUM-70)
+2. Start SCRUM-71 (Jest setup)
+
+---
+
+## Session 13 — February 26, 2026
+
+### What We Did
+
+1. **Fixed Jira API Token**
+   - Token had expired — regenerated via Atlassian account settings
+   - Updated `.env` with new token
+   - Auth confirmed working
+
+2. **Code Review SCRUM-124 (Learn: Testing in JavaScript/TypeScript - Vitest, RTL)**
+   - Reviewed all 10 comments Katie left on the ticket
+   - **Approved ✅**
+   - Highlights:
+     - vi.mock() explanation (Comment 4) — strongest note, understood mock module vs mock function vs mock data
+     - Spy vs mock distinction (Comment 6) — correct: mocks replace, spies observe
+     - AAA pattern (Comment 7) — thorough, covered all three organize-by strategies + beforeEach usage
+     - getByRole vs getByTestId (Comment 9) — added accessibility angle (screen readers, keyboard users)
+   - Minor notes:
+     - Comment 10 (FireEvent) cut off mid-sentence; also noted `userEvent` is preferred over `fireEvent` in modern RTL
+     - Comment 3 (Chai syntax) had no content
+   - Posted `[Code Review Feedback]` comment on SCRUM-124 in Jira (comment ID: 10899)
+
+### Current Status
+
+- **Sprint 1:** COMPLETE ✅
+- **Sprint 2:** IN PROGRESS
+- **SCRUM-124:** Reviewed and approved ✅
+- **Next ticket:** SCRUM-125 (next subtask under SCRUM-117)
+
+### Next Steps
+
+1. Continue with SCRUM-117 subtasks (SCRUM-125 onward)
+2. Move into coding subtasks for the testing framework
+
+---
+
+## Session 12 — February 11, 2026
+
+### What We Did
+
+1. **Discussed Sprint Order**
+   - Katie asked if Sprint 4 can be done before other sprints
+   - Answer: No, Sprint 4 depends on Sprints 2 & 3
+   - Sprint 4 (testing, CI/CD, deployment) requires having something built to test/deploy
+
+2. **Discussed Deploying Original VocabPal**
+   - Katie wants to deploy the original VocabPal (already built) first
+   - Recommended keeping documentation separate from VocabPal-Learning
+   - Suggested Option B: Light tracking (simple checklist in original repo)
+   - Learning from deployment can inform Sprint 4 planning
+
+3. **Updated SCRUM-124 with Reference Materials**
+   - Katie asked for reference materials like Sprint 1 learning tasks
+   - Added structured description to SCRUM-124 (Learn: Testing in JavaScript/TypeScript):
+     - **Goal:** Understand Vitest and RTL fundamentals
+     - **Watch (30-40 mins):** Vitest Crash Course, RTL Tutorial, Testing Hooks
+     - **Read (20-30 mins):** Vitest guide, RTL intro, Query priority, Mocking guide
+     - **Key Concepts:** describe/it, expect matchers, RTL philosophy, query priority, vi.mock(), vi.fn(), renderHook()
+     - **Done When:** Can explain AAA pattern, mocking, query priority, testing data-fetching
+
+### Current Status
+
+- **Sprint 1:** COMPLETE ✅
+- **Sprint 2:** IN PROGRESS
+- **SCRUM-124:** Reference materials added
+- **Original VocabPal:** Katie considering deployment
+
+### Next Steps
+
+1. Katie decides on approach for deploying original VocabPal
+2. Continue with Sprint 2 or start learning testing (SCRUM-124)
 
 ---
