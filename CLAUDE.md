@@ -81,7 +81,8 @@ Epic: SCRUM-5 (VocabPal - Vocabulary Learning App)
 └── Story: SCRUM-10 (Create Firebase service utilities)
 ```
 
-**Sprint 1 - Foundation:** Jan 17-24, 2026 (ACTIVE)
+**Sprint 1 - Foundation:** Jan 17-24, 2026 (COMPLETE ✅)
+**Sprint 2 - Chrome Extension:** Feb 10-17, 2026 (ACTIVE)
 
 ---
 
@@ -156,6 +157,15 @@ npm run lint       # Run ESLint
 2. Update Confluence session log page (same content)
 3. Note current status and next steps
 
+**When major milestones occur, also update these Confluence pages:**
+- **Project Overview** - Update when features/scope changes
+- **Teaching Plan - 4 Sprint Structure** - Update when sprint focus or learnings change
+- **VocabPal Project Plan** - Update when:
+  - Sprint completes (mark as COMPLETE)
+  - New sprint starts
+  - Stories/subtasks added or removed
+  - Status changes significantly
+
 **IMPORTANT:** Always update BOTH local and Confluence session logs together
 
 ---
@@ -202,5 +212,8 @@ When reviewing Katie's completed tickets:
 | └─ Session 6 - Feb 5, 2026 | SCRUM-9 review and completion |
 | └─ Session 7 - Feb 7, 2026 | SCRUM-10 started, wordService review |
 | └─ Session 8 - Feb 8, 2026 | Java concepts discussion |
+| └─ Session 9 - Feb 10, 2026 | Sprint 1 complete, Sprint 2 created |
+| └─ Session 10 - Feb 10, 2026 | Testing discussion, SCRUM-70 created |
+| └─ Session 11 - Feb 10, 2026 | Sprint 3 & 4 created with all subtasks |
 
 **Naming convention for session logs:** `Session N - Mon DD, YYYY`
