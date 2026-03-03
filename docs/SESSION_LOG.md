@@ -389,6 +389,7 @@
    - `static final` = belongs to class (constant, immutable)
 
    **Interface Decision Flow:**
+
    ```
    Need multiple inheritance?     → Interface
    Need instance fields?          → Abstract class
@@ -400,7 +401,6 @@
    ```
 
 2. **Career & Learning Discussion**
-
    - Discussed relevance of Java in AI era
    - Java still dominates: enterprise, banking, Android, big data (Hadoop/Spark/Kafka)
    - Python dominates AI/ML; TypeScript for web
@@ -552,23 +552,25 @@
 ### Updated Sprint 2 Structure
 
 **SCRUM-47: Build popup UI with React (now 8 subtasks)**
+
 - SCRUM-48: Learn React patterns for Chrome extensions
 - SCRUM-49: Create WordList component
 - SCRUM-50: Create WordCard component
 - SCRUM-51: Style popup with Tailwind CSS
 - SCRUM-52: Add popup header and footer with web app link
-- SCRUM-67: Create Flashcard component with flip animation *(NEW)*
-- SCRUM-68: Add WordList grouping by date and source *(NEW)*
-- SCRUM-69: Create CategorySelect component for study filtering *(NEW)*
+- SCRUM-67: Create Flashcard component with flip animation _(NEW)_
+- SCRUM-68: Add WordList grouping by date and source _(NEW)_
+- SCRUM-69: Create CategorySelect component for study filtering _(NEW)_
 
 **SCRUM-53: Implement content script for word highlighting (now 7 subtasks)**
+
 - SCRUM-54: Learn Content scripts and message passing
 - SCRUM-55: Create content script for text selection
 - SCRUM-56: Add context menu for saving words
 - SCRUM-57: Add visual feedback when word saved
 - SCRUM-58: Create service worker for background tasks
 - SCRUM-59: Integrate dictionary API lookup
-- SCRUM-66: Add floating "Add to VocabPal" button on text selection *(NEW)*
+- SCRUM-66: Add floating "Add to VocabPal" button on text selection _(NEW)_
 
 10. **Updated CLAUDE.md Workflow**
     - Added reminder to update Confluence pages on major milestones
@@ -718,13 +720,13 @@
 
 ### Summary of All Sprints
 
-| Sprint | Stories | Subtasks | Status |
-|--------|---------|----------|--------|
-| Sprint 1 - Foundation | 5 | 29 | ✅ COMPLETE |
-| Sprint 2 - Chrome Extension | 5 | 31 | 🔄 IN PROGRESS |
-| Sprint 3 - Web App | 7 | 34 | 📋 PLANNED |
-| Sprint 4 - Polish & Deploy | 7 | 37 | 📋 PLANNED |
-| **Total** | **24** | **131** | |
+| Sprint                      | Stories | Subtasks | Status         |
+| --------------------------- | ------- | -------- | -------------- |
+| Sprint 1 - Foundation       | 5       | 29       | ✅ COMPLETE    |
+| Sprint 2 - Chrome Extension | 5       | 31       | 🔄 IN PROGRESS |
+| Sprint 3 - Web App          | 7       | 34       | 📋 PLANNED     |
+| Sprint 4 - Polish & Deploy  | 7       | 37       | 📋 PLANNED     |
+| **Total**                   | **24**  | **131**  |                |
 
 ### Current Status
 
@@ -741,18 +743,18 @@
 
 ### Updated Sprint 4 Summary
 
-| Sprint 4 Stories | Subtasks |
-|------------------|----------|
-| SCRUM-117: Testing framework | 5 |
-| SCRUM-118: Write tests | 6 |
-| SCRUM-119: CI/CD pipeline | 5 |
-| SCRUM-120: Performance | 5 |
-| SCRUM-121: Chrome Web Store | 6 |
-| SCRUM-122: Deploy to Vercel | 5 |
-| SCRUM-123: Documentation | 5 |
-| SCRUM-161: (Bonus) AWS deployment | 6 |
-| SCRUM-169: (Bonus) Security best practices | 8 |
-| **Total** | **51** |
+| Sprint 4 Stories                           | Subtasks |
+| ------------------------------------------ | -------- |
+| SCRUM-117: Testing framework               | 5        |
+| SCRUM-118: Write tests                     | 6        |
+| SCRUM-119: CI/CD pipeline                  | 5        |
+| SCRUM-120: Performance                     | 5        |
+| SCRUM-121: Chrome Web Store                | 6        |
+| SCRUM-122: Deploy to Vercel                | 5        |
+| SCRUM-123: Documentation                   | 5        |
+| SCRUM-161: (Bonus) AWS deployment          | 6        |
+| SCRUM-169: (Bonus) Security best practices | 8        |
+| **Total**                                  | **51**   |
 
 7. **Added Sprint 3 Testing Story**
    - Created SCRUM-168: Add tests for Sprint 3 web app components
@@ -772,13 +774,13 @@
 
 ### Final Project Summary
 
-| Sprint | Stories | Subtasks | Status |
-|--------|---------|----------|--------|
-| Sprint 1 - Foundation | 5 | 29 | ✅ COMPLETE |
-| Sprint 2 - Chrome Extension | 5 | 31 | 🔄 IN PROGRESS |
-| Sprint 3 - Web App | 8 | 40 | 📋 PLANNED |
-| Sprint 4 - Polish & Deploy | 9 | 51 | 📋 PLANNED |
-| **Total** | **27** | **151** | |
+| Sprint                      | Stories | Subtasks | Status         |
+| --------------------------- | ------- | -------- | -------------- |
+| Sprint 1 - Foundation       | 5       | 29       | ✅ COMPLETE    |
+| Sprint 2 - Chrome Extension | 5       | 31       | 🔄 IN PROGRESS |
+| Sprint 3 - Web App          | 8       | 40       | 📋 PLANNED     |
+| Sprint 4 - Polish & Deploy  | 9       | 51       | 📋 PLANNED     |
+| **Total**                   | **27**  | **151**  |                |
 
 ### Next Steps
 
@@ -820,6 +822,192 @@
 
 1. Continue with SCRUM-117 subtasks (SCRUM-125 onward)
 2. Move into coding subtasks for the testing framework
+
+---
+
+## Session 14 — March 2, 2026
+
+### What We Did
+
+1. **Code Review SCRUM-125 (Set up Vitest in monorepo)**
+   - Round 1: Changes requested — wrong environment for web/extension, workspace test scripts not updated
+   - Round 2: All fixes verified ✅ — `jsdom` set for web + extension, all workspace scripts → `vitest`
+   - Approved and transitioned to Done
+
+2. **Code Review SCRUM-126 (Set up React Testing Library)**
+   - Round 1: Changes requested — testing-library packages in `dependencies` instead of `devDependencies`
+   - Round 2: Fix verified ✅ — both packages now in `devDependencies`
+   - Accepted skipping custom render for now (will revisit when writing actual component tests)
+   - Approved and transitioned to Done
+
+### Current Status
+
+- **Sprint 2:** IN PROGRESS
+- **SCRUM-125:** Done ✅
+- **SCRUM-126:** Done ✅
+- **SCRUM-127, SCRUM-128:** In Progress (Firebase Emulator, Playwright)
+- **Blocked:** Nothing
+
+3. **Added Learning Materials to SCRUM-127 and SCRUM-128**
+   - Katie asked for reference materials (both tickets were new topics)
+   - SCRUM-127 (Firebase Emulator): added why emulators > real Firebase for tests, key commands, setup steps, done criteria
+   - SCRUM-128 (Playwright): added E2E vs unit/component distinction, key Playwright APIs, setup steps, done criteria
+
+4. **Answered Katie's question on SCRUM-127 (Firebase Emulator setup)**
+   - Katie asked about creating the Vitest setup file that connects to Firebase emulators
+   - Provided comprehensive explanation of:
+     - What a Vitest setup file is and when it runs
+     - How to use connectFirestoreEmulator() and connectAuthEmulator()
+     - How to configure vitest.config.ts with setupFiles option
+     - Optional: clearing emulator data between tests
+   - Included code examples and reference documentation links
+   - Posted answer to Jira comment
+
+### Current Status
+
+- **Sprint 2:** IN PROGRESS
+- **SCRUM-125:** Done ✅
+- **SCRUM-126:** Done ✅
+- **SCRUM-127:** In Progress — learning materials added
+- **SCRUM-128:** In Progress — learning materials added
+- **Blocked:** Nothing
+
+### Next Steps
+
+1. Katie works through SCRUM-127 (Firebase Emulator setup)
+2. Katie works through SCRUM-128 (Playwright setup)
+
+---
+
+## Session 15 — March 3, 2026
+
+### What We Did
+
+1. **Answered Katie's question on SCRUM-127 (vitest setup file step)**
+   - Katie asked for more detail on: "Add a vitest setup file that connects to emulators before tests run"
+   - Explained the full dependency chain: test → wordService → db → config.ts → real Firebase
+   - Showed how `connectFirestoreEmulator()` and `connectAuthEmulator()` re-route calls to localhost
+   - Explained why setup.ts (not each test file) — `connectFirestoreEmulator()` can only be called once
+   - Posted answer as Jira comment on SCRUM-127 (comment ID: 11040)
+
+2. **Provided reference materials on how services call real Firebase**
+   - Katie asked for deeper reading on how wordService/authService hit production Firebase during tests
+   - Tied explanation to her actual code (wordService.ts line 3 + 38, config.ts)
+   - Ordered reading list: Firebase SDK connection model → Emulator Suite → why it matters for testing → video walkthrough
+   - Key mental model: `db` and `auth` are like a phone already dialed — emulator re-routes before tests run
+   - Posted as Jira comment on SCRUM-127 (comment ID: 11041)
+
+### Current Status
+
+- **Sprint 2:** IN PROGRESS
+- **SCRUM-127:** In Progress — two follow-up questions answered
+- **Blocked:** Nothing
+
+### Next Steps
+
+1. Katie continues working through SCRUM-127 (Firebase Emulator setup)
+2. Katie works through SCRUM-128 (Playwright setup)
+
+---
+
+## Session 16 — March 3, 2026 (continued)
+
+### What We Did
+
+1. **Code Review SCRUM-127 (Set up Firebase Emulator)**
+   - Status: In Review
+   - Reviewed: firebase.json, .firebaserc, setup.ts, vitest.config.ts, wordService.test.ts
+
+   **What went well:**
+   - `firebase.json` — correct emulators section (auth: 9099, Firestore: 8080, UI enabled)
+   - `setup.ts` — correct imports and emulator connections; inline comments explaining why the two functions have different signatures were excellent
+   - `vitest.config.ts` — `setupFiles` correctly configured
+
+   **One issue found:**
+   - `wordService.test.ts` uses `jest.mock()` instead of `vi.mock()` — wrong global for Vitest
+   - Fix: change `jest.mock(...)` → `vi.mock(...)` in both lines
+
+   - Posted `[Code Review Feedback]` on SCRUM-127 (comment ID: 11074)
+   - Changes requested — needs `jest` → `vi` fix before approval
+
+2. **Katie applied fixes:**
+   - `jest.mock` → `vi.mock` in `wordService.test.ts` ✅
+   - Added `"types": ["vitest/globals"]` to `shared/tsconfig.json` ✅
+   - Removed `@types/jest`, `jest`, `ts-jest` from root `package.json` ✅
+   - `vi` now recognized by TypeScript (runtime vs compile-time globals explained)
+   - Posted approval comment (comment ID: 11075)
+   - SCRUM-127 transitioned to Done ✅
+
+### Current Status
+
+- **SCRUM-127:** Done ✅
+- **Blocked:** Nothing
+
+### Next Steps
+
+1. Continue to SCRUM-128 (Playwright setup)
+
+---
+
+## Session 17 — March 3, 2026 (continued)
+
+### What We Did
+
+1. **Fixed "describe is not defined" error (SCRUM-72)**
+   - Root cause: no root-level `vitest.config.ts` — vitest ran from root with defaults (`globals: false`), ignoring `shared/vitest.config.ts`
+   - Fix: created `vitest.config.ts` at project root with `globals: true`
+   - Key insight: dependency at root, config at package level was backwards
+
+2. **Fixed missing `envDir` in shared vitest config**
+   - `.env` file is at project root; vitest running from `shared/` couldn't find it
+   - All `VITE_FIREBASE_*` variables were `undefined`, causing Firebase init to fail
+   - Fix: added `envDir: '../'` at top level of `shared/vitest.config.ts`
+   - Learned: `envDir` is a Vite config option (top level), not a Vitest option (inside `test: {}`)
+
+3. **Removed `connectAuthEmulator` from setup.ts**
+   - `firebase/auth` is browser-designed and fails in Node.js test environment
+   - `wordService.ts` doesn't use auth at all — only Firestore
+   - Removed `connectAuthEmulator` and `auth` import from `setup.ts`
+
+4. **Fixed `createWord` logic bugs**
+   - Bug 1: Used `auth.currentUser?.displayName` to identify user — always `null` in tests with no logged-in user. Fix: use `word.userId` (already passed in by caller)
+   - Bug 2: Used `words.filter()` for duplicate check — filter always returns an array (truthy even when empty), so it always treated every word as a duplicate. Fix: use `words.find()` which returns `undefined` when no match found
+
+5. **Added `clearFirestore()` helper to setup.ts**
+   - Exported async function that calls the emulator's HTTP DELETE endpoint to wipe all documents
+   - Can be used in `beforeEach`, `afterEach`, or inline inside any test
+   - `afterEach` vs `beforeEach` vs `afterAll`: per-test hooks (`beforeEach`/`afterEach`) give better isolation than `beforeAll`
+
+6. **Fixed silent test assertion bug**
+   - `expect(result.id).toBeDefined` without `()` never actually runs — test always passes
+   - Correct form: `expect(result.id).toBeDefined()`
+   - Also covered: `result!.id` (TypeScript non-null assertion `!`) should only be used after `expect(result).not.toBeNull()` first
+
+7. **Discussed mocking vs emulator**
+   - `vi.mock('firebase/firestore')` replaces all Firestore functions with fakes (pure unit test, no external deps)
+   - With emulator: integration tests that test real read/write behaviour — more valuable
+   - Since emulator is set up, mocks for Firestore are not needed
+
+8. **Posted two learning notes to SCRUM-72**
+   - Comment 1: vitest setup issues (globals, monorepo config, mocks vs emulator, envDir, config structure)
+   - Comment 2: follow-up fixes (auth.currentUser, filter vs find, toBeDefined(), !, beforeAll vs beforeEach)
+
+### Files Changed
+
+- `vitest.config.ts` — created at project root with `globals: true`
+- `shared/vitest.config.ts` — added `envDir: '../'`
+- `shared/src/services/__tests__/setup.ts` — removed auth emulator, added `clearFirestore()` export
+- `shared/src/services/wordService.ts` — removed `auth` import, fixed `auth.currentUser` → `word.userId`, fixed `filter` → `find`
+
+### Current Status
+
+- **SCRUM-72:** In Progress (test setup working, first test passing)
+- **Blocked:** Nothing
+
+### Next Steps
+
+1. Complete remaining test cases in `wordService.test.ts` (getWord, getWordsByUser, updateWord, deleteWord)
+2. Continue to SCRUM-128 (Playwright setup)
 
 ---
 
