@@ -949,6 +949,68 @@
 
 ---
 
+## Session 17 — March 3, 2026 (continued)
+
+### What We Did
+
+1. **Fixed "describe is not defined" error (SCRUM-72)**
+   - Root cause: no root-level `vitest.config.ts` — vitest ran from root with defaults (`globals: false`), ignoring `shared/vitest.config.ts`
+   - Fix: created `vitest.config.ts` at project root with `globals: true`
+   - Key insight: dependency at root, config at package level was backwards
+
+2. **Fixed missing `envDir` in shared vitest config**
+   - `.env` file is at project root; vitest running from `shared/` couldn't find it
+   - All `VITE_FIREBASE_*` variables were `undefined`, causing Firebase init to fail
+   - Fix: added `envDir: '../'` at top level of `shared/vitest.config.ts`
+   - Learned: `envDir` is a Vite config option (top level), not a Vitest option (inside `test: {}`)
+
+3. **Removed `connectAuthEmulator` from setup.ts**
+   - `firebase/auth` is browser-designed and fails in Node.js test environment
+   - `wordService.ts` doesn't use auth at all — only Firestore
+   - Removed `connectAuthEmulator` and `auth` import from `setup.ts`
+
+4. **Fixed `createWord` logic bugs**
+   - Bug 1: Used `auth.currentUser?.displayName` to identify user — always `null` in tests with no logged-in user. Fix: use `word.userId` (already passed in by caller)
+   - Bug 2: Used `words.filter()` for duplicate check — filter always returns an array (truthy even when empty), so it always treated every word as a duplicate. Fix: use `words.find()` which returns `undefined` when no match found
+
+5. **Added `clearFirestore()` helper to setup.ts**
+   - Exported async function that calls the emulator's HTTP DELETE endpoint to wipe all documents
+   - Can be used in `beforeEach`, `afterEach`, or inline inside any test
+   - `afterEach` vs `beforeEach` vs `afterAll`: per-test hooks (`beforeEach`/`afterEach`) give better isolation than `beforeAll`
+
+6. **Fixed silent test assertion bug**
+   - `expect(result.id).toBeDefined` without `()` never actually runs — test always passes
+   - Correct form: `expect(result.id).toBeDefined()`
+   - Also covered: `result!.id` (TypeScript non-null assertion `!`) should only be used after `expect(result).not.toBeNull()` first
+
+7. **Discussed mocking vs emulator**
+   - `vi.mock('firebase/firestore')` replaces all Firestore functions with fakes (pure unit test, no external deps)
+   - With emulator: integration tests that test real read/write behaviour — more valuable
+   - Since emulator is set up, mocks for Firestore are not needed
+
+8. **Posted two learning notes to SCRUM-72**
+   - Comment 1: vitest setup issues (globals, monorepo config, mocks vs emulator, envDir, config structure)
+   - Comment 2: follow-up fixes (auth.currentUser, filter vs find, toBeDefined(), !, beforeAll vs beforeEach)
+
+### Files Changed
+
+- `vitest.config.ts` — created at project root with `globals: true`
+- `shared/vitest.config.ts` — added `envDir: '../'`
+- `shared/src/services/__tests__/setup.ts` — removed auth emulator, added `clearFirestore()` export
+- `shared/src/services/wordService.ts` — removed `auth` import, fixed `auth.currentUser` → `word.userId`, fixed `filter` → `find`
+
+### Current Status
+
+- **SCRUM-72:** In Progress (test setup working, first test passing)
+- **Blocked:** Nothing
+
+### Next Steps
+
+1. Complete remaining test cases in `wordService.test.ts` (getWord, getWordsByUser, updateWord, deleteWord)
+2. Continue to SCRUM-128 (Playwright setup)
+
+---
+
 ## Session 12 — February 11, 2026
 
 ### What We Did
