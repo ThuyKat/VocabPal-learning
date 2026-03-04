@@ -62,8 +62,8 @@ export async function createWord(
   //add to the db
   const docRef = await addDoc(collection(db, 'words'), wordConverter.toFirestore(word));
   return {
-    id: docRef.id,
     ...word,
+    id: docRef.id,
     createdAt: new Date(),
     updatedAt: new Date(),
   };
