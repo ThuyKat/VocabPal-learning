@@ -31,12 +31,16 @@ describe('wordService', () => {
       //first check - not null
       expect(result!.id).toBeDefined();
     });
-    it('word created should not be duplicated with the existing word', async () => {});
+    it('word created should not be duplicated with the existing word', async () => {
+      await createWord(testWord);
+      const result = await createWord(testWord);
+      expect(result).toBeNull();
+    });
   });
   describe('getWordByUser', () => {
     it('should return an array of words', async () => {
-      let words = getWordsByUser(testWord.userId);
-      expect(Array.isArray(words)).toBeTruthy;
+      const words = await getWordsByUser(testWord.userId);
+      expect(Array.isArray(words)).toBeTruthy();
     });
   });
   describe('getWord', () => {
