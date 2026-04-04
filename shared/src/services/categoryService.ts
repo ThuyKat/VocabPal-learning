@@ -28,12 +28,18 @@ const categoryConverter = {
 }
 
 // Create a new category
-export async function createCategory(category: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>): Promise<Category>{
-        // Implementation to add category to Firestore and return the created category with id and timestamps
+export async function createCategory(category: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>): Promise<Category | null>{
+        const categories = await getCategoriesByUser(category.userId);
+        const duplicate = categories.find(
+            (cat) => cat.name.toLocaleLowerCase() === category.name.toLocaleLowerCase()
+        );
+        if (duplicate) {
+            return null;
+        }
         const docRef = await addDoc(collection(db, "categories"), categoryConverter.toFirestore(category));
         return {
-            id: docRef.id,
             ...category,
+            id: docRef.id,
             createdAt: new Date(),
             updatedAt: new Date(),
         };
@@ -46,6 +52,17 @@ export async function getCategoriesByUser(userId: string): Promise<Category[]>{
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map((doc) => categoryConverter.fromFirestore(doc));
 }
+// Get a single category by ID
+export async function getCategory(categoryId: string): Promise<Category | null> {
+    const docRef = doc(db, "categories", categoryId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        return categoryConverter.fromFirestore(docSnap);
+    } else {
+        return null;
+    }
+}
+
 // Update a category
 export async function updateCategory(categoryId: string, updates: Partial<Category>): Promise<void>{
     const docRef = doc(db, "categories", categoryId);

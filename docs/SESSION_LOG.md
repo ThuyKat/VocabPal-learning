@@ -1048,3 +1048,52 @@
 2. Continue with Sprint 2 or start learning testing (SCRUM-124)
 
 ---
+
+## Session 14 — April 5, 2026
+
+### What We Did
+
+1. **Answered questions about Firebase Emulator setup (SCRUM-127 recap)**
+   - Katie asked where session notes about emulator setup lived — pointed to SCRUM-127 (main ticket) and SCRUM-72 (learning notes)
+   - Explained how `connectFirestoreEmulator()` mutates the `db` instance so all services re-route to localhost
+   - Explained that `connectAuthEmulator` in setup.ts is currently unused (wordService tests don't use auth) and will only matter when authService tests are written in Sprint 3
+   - Explained how `word.userId` is used instead of `auth.currentUser` in tests — caller controls userId directly
+
+2. **Added `getCategory` method to categoryService.ts**
+   - Katie asked for a `getCategory(id)` function
+   - Added following the same pattern as `getWord` in wordService.ts
+   - Returns `Category | null`
+
+3. **Wrote tests for categoryService (SCRUM-73)**
+   - Added `getCategory` tests: exists + not found
+   - Added `deleteCategory` test
+   - Imported `deleteCategory` in test file
+
+4. **Fixed bugs found during test writing**
+   - `categoryService.ts`: missing duplicate check in `createCategory` — added `getCategoriesByUser` + `find()` guard, same as wordService
+   - `categoryService.ts`: spread order bug — `id: docRef.id` was before `...category`, causing `testCategory.id = '1'` to overwrite the real Firestore ID. Fixed by moving `id` after the spread
+   - `categoryService.test.ts` updateCategory test: was using `testCategory.id` (hardcoded) instead of `createdCategory!.id` (real Firestore ID)
+
+5. **Explained TypeScript `!` non-null assertion operator**
+   - `result!.id` tells TypeScript "I know this is not null" — safe to use after an `expect(result).not.toBeNull()` check
+
+6. **Code Review posted to SCRUM-73** (comment ID: 11210)
+   - Status: APPROVED pending green `npm test`
+
+### Files Changed
+
+- `shared/src/services/categoryService.ts` — added `getCategory`, added duplicate check to `createCategory`, fixed spread order, changed return type to `Category | null`
+- `shared/src/services/__tests__/categoryService.test.ts` — added getCategory tests, deleteCategory test, imported deleteCategory
+
+### Current Status
+
+- **SCRUM-73:** In Review — move to Done once `npm test` passes
+- **Blocked:** Nothing
+
+### Next Steps
+
+1. Run `npm test` in `shared/` to confirm all categoryService tests pass
+2. Move SCRUM-73 to Done
+3. Continue with remaining Sprint 2 tickets
+
+---
