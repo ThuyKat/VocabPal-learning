@@ -1097,3 +1097,270 @@
 3. Continue with remaining Sprint 2 tickets
 
 ---
+
+## Session 15 — April 5, 2026
+
+### What We Did
+
+1. **Fixed SCRUM-74 and SCRUM-75 ticket descriptions**
+   - Both had Jest syntax (`jest.mock`, `jest.fn()`) — replaced with Vitest equivalents (`vi.mock`, `vi.fn()`)
+   - SCRUM-74: added `mockUser` definition, explained why mocking is needed instead of emulator
+   - SCRUM-75: fixed `as jest.Mock` cast → `as unknown as typeof fetch`
+   - SCRUM-75 Done When: updated "Jest format" → "Vitest format"
+
+2. **Wrote tests for authService (SCRUM-74)**
+   - Created `shared/src/services/__tests__/authService.test.ts`
+   - Tests: `signInWithGoogle`, `getCurrentUser`, `signOut`
+
+3. **Debugged and fixed mock issues**
+
+   **Bug 1: `result.id` was undefined**
+   - `signInWithPopup` was mocked as `vi.fn()` with no return value
+   - authService does `const user = result.user` — so mock must resolve with `{ user: { uid, ... } }`
+   - Fix: `signInWithPopup: vi.fn(async () => ({ user: { uid: mockUser.uid, ... } }))`
+
+   **Bug 2: `getCurrentUser()` returned non-null after `signOut()`**
+   - `getAuth` mock had `currentUser: mockUser` hardcoded — value captured once at creation, never changed
+   - Fix: use a variable + getter so it reads fresh each time:
+     ```ts
+     let mockCurrentUser = mockUser;
+     getAuth: vi.fn(() => ({
+       get currentUser() { return mockCurrentUser; },
+       signOut: vi.fn(async () => { mockCurrentUser = null; }),
+     }))
+     ```
+
+4. **Key concepts discussed**
+   - Why auth uses mocks not emulator: `firebase/auth` is browser-only, crashes in Node.js test env
+   - `Promise.resolve(x)` and `async () => x` are equivalent in mocks
+   - Only mock what your code actually calls — trace your own code, not the full Firebase API
+   - Stateful mocks: use a variable + JS getter to simulate state changes across function calls
+   - Posted learning notes to SCRUM-74 as Jira comment
+
+### Files Changed
+
+- `shared/src/services/__tests__/authService.test.ts` — created with full test suite
+
+### Current Status
+
+- **SCRUM-74:** In Progress — tests written, debugging in progress
+- **Blocked:** Nothing
+
+### Next Steps
+
+1. Confirm all authService tests pass
+2. Move SCRUM-74 to Done
+3. Continue with SCRUM-75 (DictionaryAdapter tests)
+
+---
+
+## Session 16 — April 5, 2026
+
+### What We Did
+
+1. **Continued authService test work (SCRUM-74)**
+   - Added `onAuthStateChange` test
+   - Simplified `onAuthStateChanged` mock to immediately fire the callback: `vi.fn((cb) => { cb(); return vi.fn(); })`
+   - Removed unnecessary `clearFirestore()` import and `beforeEach` call
+   - Added `beforeEach` to reset `mockCurrentUser = mockUser`
+
+2. **Debugged and discussed mock concepts**
+
+   **Why `currentUser: mockCurrentUser` vs `get currentUser()`**
+   - Regular property copies the value at object creation — changing `mockCurrentUser` later has no effect on the property
+   - Getter runs every time the property is accessed — always returns the current variable value
+   - Conclusion: getter not needed in this test because `getAuth()` is called fresh inside every service function, creating a new object each time that picks up the latest `mockCurrentUser`
+
+   **Why `vi.fn()` needs a return value for `onAuthStateChanged`**
+   - Real Firebase's `onAuthStateChanged` returns an unsubscribe function
+   - authService stores it as `unsubscribe` and returns it — so the mock must return something callable: `return vi.fn()`
+
+   **`Promise.resolve()` vs `async () =>`**
+   - Both are equivalent — `async` automatically wraps return value in a Promise
+
+   **`() => void` return type on `onAuthStateChange`**
+   - The function returns the Firebase unsubscribe function, which has shape `() => void` (call with no args, returns nothing)
+
+   **Object literals — properties, methods, and getters**
+   - All three can be mixed in one `{}` block
+   - Getter syntax (`get name() {}`) is the same concept as in classes, just inline
+
+3. **Code review posted on SCRUM-74** — one remaining issue: `currentUser: mockCurrentUser` should use getter, then confirmed getter not needed after deeper analysis. Learning notes posted.
+
+### Files Changed
+
+- `shared/src/services/__tests__/authService.test.ts` — added `onAuthStateChange` test, fixed `onAuthStateChanged` mock, removed `clearFirestore`, added `beforeEach` reset
+
+### Current Status
+
+- **SCRUM-74:** In Review
+- **Blocked:** Nothing
+
+### Next Steps
+
+1. Confirm all authService tests pass with `npm test`
+2. Move SCRUM-74 to Done
+3. Continue with SCRUM-75 (DictionaryAdapter tests)
+
+---
+
+## Session 17 — April 9, 2026
+
+### What We Did
+
+1. **Engineering Quality Gap Analysis**
+   - Compared VocabPal-Learning against The Booking Kit (open source project by Zain, ~55k lines TypeScript)
+   - Identified 4 key gaps: CI/CD granularity, test coverage standards, branch strategy/pre-commit hooks, documentation completeness
+
+2. **Created Confluence page: Engineering Quality Gaps**
+   - Page: "Engineering Quality Gaps: VocabPal vs Industry Standards"
+   - URL: https://katienguyen1293.atlassian.net/wiki/spaces/VP/pages/18644993
+   - Content: benchmark table, 4 detailed gap analyses, summary table, proposed Jira work
+
+3. **Created Story A: SCRUM-187 — Enforce code quality with pre-commit hooks and branch strategy**
+   - Sprint 4 | 5 subtasks: SCRUM-188 to SCRUM-192
+   - Covers: Husky + lint-staged, branch naming convention, GitHub branch protection, Dependabot
+
+4. **Created Story B: SCRUM-193 — Define and enforce test coverage standards**
+   - Sprint 4 | 6 subtasks: SCRUM-194 to SCRUM-199
+   - Covers: coverage metrics, Vitest thresholds (80% services / 70% components), CI coverage summary, property-based testing with fast-check
+
+5. **Created Story C: SCRUM-200 — Complete project documentation to professional standard**
+   - Sprint 4 | 4 subtasks: SCRUM-201 to SCRUM-204
+   - Covers: fill in ARCHITECTURE.md and DECISIONS.md, create CONTRIBUTING.md, add README badges
+
+6. **Added 3 subtasks to SCRUM-119 (CI/CD)**
+   - SCRUM-205: Separate lint job in ci.yml
+   - SCRUM-206: Separate typecheck job in ci.yml (tsc --noEmit)
+   - SCRUM-207: Coverage threshold gate in CI
+
+### New Tickets Summary
+
+| Ticket | Summary | Sprint |
+|--------|---------|--------|
+| SCRUM-187 | Pre-commit hooks and branch strategy | 4 |
+| SCRUM-193 | Test coverage standards | 4 |
+| SCRUM-200 | Complete project documentation | 4 |
+| SCRUM-205–207 | Added to existing SCRUM-119 (CI/CD) | 4 |
+
+### Current Status
+
+- **Sprint 2:** IN PROGRESS (SCRUM-74 in review, SCRUM-75 next)
+- **Sprint 4 gaps:** Fully ticketed — SCRUM-187, SCRUM-193, SCRUM-200, SCRUM-205/206/207
+
+### Next Steps
+
+1. Continue SCRUM-74 (confirm authService tests pass, move to Done)
+2. Move to SCRUM-75 (DictionaryAdapter tests)
+3. Sprint 4 gap tickets addressed when Sprint 4 begins
+
+---
+
+## Session 18 — August 29, 2026
+
+### What We Did
+
+1. **Discovered the entire Jira project (SCRUM) was permanently deleted**
+   - Katie's Jira had been inactive too long; Atlassian deleted all issue history
+   - Asked Katie to reconstruct the whole board from `SESSION_LOG.md` and her separate `katie-learning-notes` Docusaurus site
+
+2. **Investigated before rebuilding**
+   - Found the Atlassian MCP connection now points to a *different* site: `vocabpal.atlassian.net` (project "My Scrum Space", key SCRUM) — not `katienguyen1293.atlassian.net` as documented in CLAUDE.md
+   - That SCRUM project was not empty — it already held 200 issues from an apparent earlier, incomplete reconstruction attempt (Sprint 1 had good real titles; Sprint 2 onward had generic placeholder titles like "Subtask of SCRUM-40: ...")
+   - Confirmed with Katie: wipe those 200 placeholder issues and rebuild clean. Also confirmed the original site's project is not recoverable via Atlassian's restore/trash window.
+   - No delete tool exists in the Atlassian MCP toolset — Katie bulk-deleted the 200 issues manually via Jira's Bulk Change UI
+
+3. **Rebuilt the full Jira hierarchy from SESSION_LOG.md**
+   - Reconciled Sprint 2 testing-story status against actual `git log`/`git status` (not just the log text) to get real completion state right
+   - Wrote a full spec (Epic → 30 Stories → 169 Subtasks across all 4 sprints, with target status per item) to a scratch file
+   - Delegated the ~200-issue creation to a background agent with Atlassian MCP tool access (create + status transitions + verification)
+   - Result: 200/200 issues created and verified — 1 Epic, 30 Stories, 169 Subtasks; 41 Done / 4 In Progress / 155 To Do; sprint grouping done via labels (`sprint-1-foundation`, etc.) since team-managed Jira Sprints aren't creatable through the available tools
+   - New Epic: SCRUM-201 (https://vocabpal.atlassian.net/browse/SCRUM-201) — all issue keys are new; they do not match the original SCRUM-N numbers
+   - Sprint 3 and most of Sprint 4 subtask titles are synthesized from the session log's thematic summaries (exact original wording wasn't recorded there), not literal reconstructions
+
+### Current Status
+
+- **Jira:** Fully rebuilt at vocabpal.atlassian.net, project SCRUM, Epic SCRUM-201
+- **CLAUDE.md/Confluence:** Still reference the old site (katienguyen1293.atlassian.net) — needs updating to match the now-active vocabpal.atlassian.net, not yet done
+- **No real Jira Sprints:** Stories are grouped via sprint-N labels instead; creating actual Sprint containers is a manual step in the Backlog view if wanted
+
+### Next Steps
+
+1. Decide whether to update CLAUDE.md's Jira/Confluence site references to vocabpal.atlassian.net
+2. Optionally create real Sprint containers in the Backlog view and assign the labeled Stories into them
+3. Resume actual development work (SCRUM-74 equivalent: authService tests: In Progress; SCRUM-75 equivalent: DictionaryAdapter tests: To Do)
+
+---
+
+## Session 19 — August 31, 2026
+
+### What We Did
+
+1. **Added descriptions to all 199 rebuilt Story/Subtask issues**
+   - Katie noticed the freshly rebuilt tickets had titles only, no description body
+   - Confirmed scope with Katie: full Goal/Steps/Learning resources/Done-when template on every Subtask (matching Katie's original Session 1 teaching format), short summary paragraph on every Story, across all 199 non-Epic issues
+   - Sprint 1 subtasks (already Done) got retrospective descriptions using real facts from the session log (what was actually built/fixed) rather than a forward-looking template, since the work is already complete
+   - Sprint 2's in-progress/done testing subtasks similarly got retrospective text; everything still To Do got the full forward-looking template
+   - Wrote all 199 descriptions to a spec file, then delegated the mechanical Jira updates to a background agent
+
+2. **Agent caught a real ambiguity**
+   - "Create Flashcard component with flip animation" exists as a subtask under two different stories (extension popup UI in Sprint 2, web app Flashcards page in Sprint 3) with different intended descriptions
+   - Agent disambiguated by matching on (parent story, subtask title) instead of title alone, so each got its correct, distinct description instead of one clobbering the other
+
+3. **Result:** 199/199 issues updated successfully, 0 unmatched, Epic SCRUM-201's existing description left untouched. Spot-checked 5 issues including both Flashcard subtasks to confirm correct content landed.
+
+### Current Status
+
+- **Jira:** All 200 issues (Epic + 30 Stories + 169 Subtasks) now have both correct hierarchy/status/labels (Session 18) and full descriptions (this session)
+- **Still open from Session 18:** CLAUDE.md/Confluence site references not yet updated to vocabpal.atlassian.net; no real Jira Sprint containers created yet (labels only)
+
+### Next Steps
+
+1. Decide whether to update CLAUDE.md's Jira/Confluence site references to vocabpal.atlassian.net
+2. Optionally create real Sprint containers in the Backlog view and assign the labeled Stories into them
+3. Resume actual development work (authService tests: In Progress; DictionaryAdapter tests: To Do)
+
+---
+
+## Session 20 — September 10, 2026
+
+### What We Did
+
+1. **Answered: where does Vite expect env vars, and where does `web/` fit in the monorepo?**
+   - Confirmed `shared/src/firebaseConfig/config.ts` reads Firebase config via `import.meta.env.VITE_*` (Vite convention, only works under Vite's own transform — not `process.env`)
+   - Explained the `VITE_` prefix requirement and that `.env` is resolved per-workspace via each `vitest.config.ts`'s `envDir` — `shared/vitest.config.ts` sets `envDir: '../'` to reach the root `.env`
+   - Confirmed `web/` is already a listed npm workspace (root `package.json`) alongside `extension/` and `shared/`, but is still just scaffolding: `package.json`/`tsconfig.json`/`vitest.config.ts` exist, no `src/`, no `vite.config.ts`, no `index.html` yet — same stage as `extension/`
+
+2. **Found two latent bugs while investigating (not yet fixed):**
+   - `shared/vitest.config.ts` still points `setupFiles` at `./src/services/__tests__/setup.ts`, but that `services/` folder was deleted and replaced by `src/api/__tests__/` — `npm test` in `shared/` is likely broken right now
+   - `web/vitest.config.ts` and `extension/vitest.config.ts` have no `envDir` set, so once either workspace imports `shared`'s Firebase config in a test, `VITE_FIREBASE_*` will resolve to `undefined` (Vite will look for `.env` in the wrong directory)
+   - Also noted: neither `web/package.json` nor `extension/package.json` declares `@vocabpal/shared` as a dependency yet — needed before either can import from `shared`
+
+3. **Katie fixed the `web`/`extension` `envDir` gap herself** — added `envDir: '../'` to both `web/vitest.config.ts` and `extension/vitest.config.ts`
+
+4. **Answered: how do you test that `web` can call methods from `shared` once it's built?**
+   - Walked through three levels: a module-resolution smoke test with a pure export (no Firebase), calling the Firebase-backed services against the local emulator (reusing `shared/src/api/__tests__/setup.ts`'s emulator-connect pattern), and full integration once `web/` has a real Vite app
+   - Confirmed `web/` has no `src/` yet, so this is prep for Sprint 3, not immediate work
+
+5. **Discussed npm scope naming (`@vocabpal` vs `@vocabpal-learning`)** — recommended keeping `@vocabpal`, since the scope is just an internal workspace label (packages are private, never published) with no need to match the root `package.json` name
+
+6. **Set up a `@/` path alias for `shared/src`, to replace relative imports**
+   - Katie added `resolve.alias` in `shared/vitest.config.ts` and `baseUrl`/`paths` in `shared/tsconfig.json` herself
+   - Claude updated the imports in `shared/src/api/firebase/{wordService,categoryService,authService}.ts` and `shared/src/api/dictionaryapi/{DictionaryAdapter,transformWord,dictionaryApi}.ts` from relative paths to `@/types` / `@/firebaseConfig/config`
+   - **Caught and fixed 3 real broken imports in the process** (these were TS2307 compile errors, not just style): `authService.ts`'s `'../types'` and `categoryService.ts`'s `'../types'` were both one directory level too shallow (should've been `'../../types'`), and `categoryService.ts`'s `'./config'` pointed at a nonexistent local file instead of `'../../firebaseConfig/config'`
+   - Verified fix with `npx tsc --noEmit` (clean) and `npx vitest run` — remaining test failures are all `ECONNREFUSED :8080`, i.e. the Firebase emulator wasn't running locally, unrelated to the import fix
+
+### Current Status
+
+- `shared/` now typechecks cleanly; its Firebase-backed tests need `firebase emulators:start` running to pass
+- `web/vitest.config.ts` and `extension/vitest.config.ts` `envDir` gap is fixed
+- `shared/vitest.config.ts`'s stale `setupFiles` path was already correct by the time it was checked (pointed at `./src/api/__tests__/setup.ts`) — no longer an open issue
+- Still open: `@vocabpal/shared` not yet declared as a dependency in `web/package.json` or `extension/package.json`; `web/` still has no `src/`, `vite.config.ts`, or `index.html`
+
+### Next Steps
+
+1. Wire `@vocabpal/shared` as a declared dependency of `web/` and `extension/` when Sprint 3 web app work starts
+2. Write the first `web/` smoke test importing a pure export from `@vocabpal/shared` (e.g. `transformWord`) once `web/src/` exists
+3. Resume actual development work (authService tests: In Progress; DictionaryAdapter tests: To Do)
+
+---

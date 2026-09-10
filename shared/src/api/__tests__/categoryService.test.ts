@@ -6,7 +6,7 @@ import {
   getCategory,
   updateCategory,
   deleteCategory,
-} from '../categoryService';
+} from '../firebase/categoryService';
 
 beforeEach(async () => {
   await clearFirestore();

@@ -6,6 +6,9 @@
   "author": "",
   "type": "commonjs",
   "main": "index.js",
+  "dependencies": {
+    "@vocabpal/shared": "*"
+  },
   "scripts": {
     "test": "vitest",
     "test:watch": "vitest --watch"

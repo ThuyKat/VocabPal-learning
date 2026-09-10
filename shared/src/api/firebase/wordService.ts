@@ -1,6 +1,6 @@
 import { DocumentSnapshot, serverTimestamp, SnapshotOptions } from 'firebase/firestore';
-import { Word } from '../types';
-import { db } from '../firebase/config';
+import { Word } from '@/types';
+import { db } from '@/firebaseConfig/config';
 import {
   collection,
   addDoc,

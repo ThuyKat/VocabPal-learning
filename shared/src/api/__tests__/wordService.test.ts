@@ -1,6 +1,12 @@
 //mock firebase
-import { Word } from '../../types';
-import { createWord, deleteWord, getWord, getWordsByUser, updateWord } from '../wordService';
+import { Word } from '@/types';
+import {
+  createWord,
+  deleteWord,
+  getWord,
+  getWordsByUser,
+  updateWord,
+} from '@/api/firebase/wordService';
 import { clearFirestore } from './setup';
 
 // Mock Firebase
