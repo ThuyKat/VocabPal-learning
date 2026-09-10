@@ -1125,9 +1125,13 @@
      ```ts
      let mockCurrentUser = mockUser;
      getAuth: vi.fn(() => ({
-       get currentUser() { return mockCurrentUser; },
-       signOut: vi.fn(async () => { mockCurrentUser = null; }),
-     }))
+       get currentUser() {
+         return mockCurrentUser;
+       },
+       signOut: vi.fn(async () => {
+         mockCurrentUser = null;
+       }),
+     }));
      ```
 
 4. **Key concepts discussed**
@@ -1236,12 +1240,12 @@
 
 ### New Tickets Summary
 
-| Ticket | Summary | Sprint |
-|--------|---------|--------|
-| SCRUM-187 | Pre-commit hooks and branch strategy | 4 |
-| SCRUM-193 | Test coverage standards | 4 |
-| SCRUM-200 | Complete project documentation | 4 |
-| SCRUM-205–207 | Added to existing SCRUM-119 (CI/CD) | 4 |
+| Ticket        | Summary                              | Sprint |
+| ------------- | ------------------------------------ | ------ |
+| SCRUM-187     | Pre-commit hooks and branch strategy | 4      |
+| SCRUM-193     | Test coverage standards              | 4      |
+| SCRUM-200     | Complete project documentation       | 4      |
+| SCRUM-205–207 | Added to existing SCRUM-119 (CI/CD)  | 4      |
 
 ### Current Status
 
@@ -1265,7 +1269,7 @@
    - Asked Katie to reconstruct the whole board from `SESSION_LOG.md` and her separate `katie-learning-notes` Docusaurus site
 
 2. **Investigated before rebuilding**
-   - Found the Atlassian MCP connection now points to a *different* site: `vocabpal.atlassian.net` (project "My Scrum Space", key SCRUM) — not `katienguyen1293.atlassian.net` as documented in CLAUDE.md
+   - Found the Atlassian MCP connection now points to a _different_ site: `vocabpal.atlassian.net` (project "My Scrum Space", key SCRUM) — not `katienguyen1293.atlassian.net` as documented in CLAUDE.md
    - That SCRUM project was not empty — it already held 200 issues from an apparent earlier, incomplete reconstruction attempt (Sprint 1 had good real titles; Sprint 2 onward had generic placeholder titles like "Subtask of SCRUM-40: ...")
    - Confirmed with Katie: wipe those 200 placeholder issues and rebuild clean. Also confirmed the original site's project is not recoverable via Atlassian's restore/trash window.
    - No delete tool exists in the Atlassian MCP toolset — Katie bulk-deleted the 200 issues manually via Jira's Bulk Change UI
@@ -1346,7 +1350,7 @@
 
 6. **Set up a `@/` path alias for `shared/src`, to replace relative imports**
    - Katie added `resolve.alias` in `shared/vitest.config.ts` and `baseUrl`/`paths` in `shared/tsconfig.json` herself
-   - Claude updated the imports in `shared/src/api/firebase/{wordService,categoryService,authService}.ts` and `shared/src/api/dictionaryapi/{DictionaryAdapter,transformWord,dictionaryApi}.ts` from relative paths to `@/types` / `@/firebaseConfig/config`
+   - Katie updated the imports in `shared/src/api/firebase/{wordService,categoryService,authService}.ts` and `shared/src/api/dictionaryapi/{DictionaryAdapter,transformWord,dictionaryApi}.ts` from relative paths to `@/types` / `@/firebaseConfig/config`
    - **Caught and fixed 3 real broken imports in the process** (these were TS2307 compile errors, not just style): `authService.ts`'s `'../types'` and `categoryService.ts`'s `'../types'` were both one directory level too shallow (should've been `'../../types'`), and `categoryService.ts`'s `'./config'` pointed at a nonexistent local file instead of `'../../firebaseConfig/config'`
    - Verified fix with `npx tsc --noEmit` (clean) and `npx vitest run` — remaining test failures are all `ECONNREFUSED :8080`, i.e. the Firebase emulator wasn't running locally, unrelated to the import fix
 
@@ -1357,10 +1361,74 @@
 - `shared/vitest.config.ts`'s stale `setupFiles` path was already correct by the time it was checked (pointed at `./src/api/__tests__/setup.ts`) — no longer an open issue
 - Still open: `@vocabpal/shared` not yet declared as a dependency in `web/package.json` or `extension/package.json`; `web/` still has no `src/`, `vite.config.ts`, or `index.html`
 
+7. **Pushed both repos to GitHub** — `VocabPal-Learning` (`SCRUM-117`, commit `828bc63`: the `shared/api` restructure, alias, import fixes) and `katie-learning-notes` (`main`, commit `e2c4ec0`: the new `vite.md` doc, `sync-jira.js` fix, sidebar addition)
+
+8. **Set up GitHub Actions auto-deploy for katie-learning-notes** — `katie-learning-notes` was only deploying to GitHub Pages via a manual local `npm run deploy` (Docusaurus pushing to `gh-pages`); added `.github/workflows/deploy.yml` to build and deploy automatically on every push to `main`
+   - First run failed: `sidebars.ts` referenced 4 docs (`project/overview`, `project/architecture`, `learning-notes/javascript/async-await`, `learning-notes/javascript/adapter-pattern`) that are gitignored under an "Excluded from public site" rule and were never actually committed — a pre-existing gap that only ever surfaced on a truly clean checkout, which this was the first one of
+   - Fixed by gating those 4 sidebar entries on `process.env.CI` (set automatically by GitHub Actions) — shown locally, hidden in CI/production — verified both by direct evaluation of `sidebars.ts`'s output and by a real GitHub Actions run
+   - Confirmed live: fetched `thuykat.github.io/learning-notes-VP/learning-notes/build-tools/vite` directly and verified the page content and "Build Tools" sidebar entry render correctly
+
+9. **Marked SCRUM-292 Done** — updated `vite.md`'s status line and transitioned the Jira ticket via the Atlassian MCP connection to `vocabpal.atlassian.net`
+
+### Current Status
+
+- `katie-learning-notes` now auto-deploys to GitHub Pages on every push to `main`; no more manual `npm run deploy` needed
+- SCRUM-292 (Learn Vite and React project structure) is Done — the doc fully covers its "Done When" criteria (env vars, monorepo/`web` fit, and the dev-server-vs-webpack bundling explanation)
+
 ### Next Steps
 
 1. Wire `@vocabpal/shared` as a declared dependency of `web/` and `extension/` when Sprint 3 web app work starts
 2. Write the first `web/` smoke test importing a pure export from `@vocabpal/shared` (e.g. `transformWord`) once `web/src/` exists
-3. Resume actual development work (authService tests: In Progress; DictionaryAdapter tests: To Do)
+3. Move to the next SCRUM-213 subtask: SCRUM-293 (Create web folder with Vite + React + TypeScript)
+4. Resume actual development work (authService tests: In Progress; DictionaryAdapter tests: To Do)
+
+---
+
+## Session 21 — September 10–11, 2026
+
+### What We Did
+
+1. **Fixed a duplicate nested `web/web/` folder** — Katie ran `npm create vite@latest web` from inside `web/` itself, scaffolding a fresh Vite project one level too deep. Flattened `web/web/*` up into `web/`, hand-merged the two colliding `package.json`s (kept the real Vite scaffold's scripts/dependencies, re-added `@vocabpal/shared` and the `test`/`test:watch` scripts so nothing from earlier sessions was lost), and kept the new Vite-generated `tsconfig.json` (project-references style) over the old thin one.
+
+2. **Installed the missing `jsdom` devDependency at the root** — `web/vitest.config.ts` and `extension/vitest.config.ts` both set `environment: 'jsdom'`, but `jsdom` itself was never actually installed anywhere in the repo; this was the first time either workspace's test script had actually been run. Fixed for both workspaces at once via the root `package.json`.
+
+3. **Set up `web/src/test-setup.ts`** importing `@testing-library/jest-dom`, wired via `setupFiles` in `web/vitest.config.ts`, so DOM matchers (`toBeInTheDocument()`, etc.) are available in every `web` test. Verified end-to-end with a real component test, not just config inspection.
+
+4. **Fixed a runtime crash in `App.tsx`**: `<Link>` elements were rendered as siblings *after* `</BrowserRouter>` closed, outside the router's context provider — caused `Uncaught TypeError: Cannot destructure property 'basename' of ... null` the moment the app rendered. Moved them inside `<BrowserRouter>`.
+
+5. **Verified Tailwind CSS actually works, not just installed** — found `src/index.css` was missing `@import 'tailwindcss';` (the `@tailwindcss/vite` plugin alone injects nothing without it). Added it, added a temporary utility-class element, and confirmed via the actual built CSS output (`grep`'d for `.bg-purple-600{...}` in `dist/assets/*.css`) that real rules were generated — not just present as an inert class name.
+
+6. **Reviewed Katie's SCRUM-295 implementation (React Router setup) against the ticket's actual acceptance criteria** — found two real gaps: the `Categories` placeholder page was missing entirely (ticket requires 4 pages, only 3 existed), and `Words` was only reachable at `/` (index route), not at `/words` as the ticket's own "Done When" example requires. Katie fixed the Categories gap herself; the `/words` routing decision is still open (she interrupted the question to chase a different bug — see below).
+
+7. **Debugged a deep `@shared` alias failure, in layers:**
+   - `web/tsconfig.app.json` was missing a `@shared/*` paths entry that `web/vite.config.ts`'s `resolve.alias` already had — type-checker didn't know about it
+   - Fixing that revealed a deeper problem: importing via the raw path `@shared/api/firebase/wordService` pulled `shared`'s internal `.ts` source directly into `web`'s own `tsc` compilation, checked under `web`'s stricter rules (`verbatimModuleSyntax`) with no knowledge of `shared`'s own `@` alias — a structural mismatch, not a config typo
+   - Root cause underneath that: `shared/package.json`'s `"main": "index.js"` pointed at a file that had never existed — the package had no real entry point at all
+   - Fixed properly: gave `shared` a real `build` script (`tsc`), ran it to generate `shared/dist/`, and pointed `main`/`types` at the compiled output (`./dist/api/index.js` / `.d.ts`) instead of raw source — the standard, correct shape for a TS workspace dependency
+   - Also fixed a typo along the way: `Words.tsx` imported a nonexistent `getWordByUser`; the real export is `getWordsByUser`
+
+8. **Explored TypeScript Project References as an alternative ("Pattern B")** to the manual `dist/` build ("Pattern A") — worked through the full `composite`/`references` setup, then arrived at the key realization together: Project References doesn't replace building `shared` to `dist/`, it only automates *triggering* that build via `tsc -b`. `shared/package.json`'s `main`/`types` still point at compiled output either way. Decided `tsc --watch` in a spare terminal was the more proportionate fix for this project's size, given Project References requires touching 4 config files and still doesn't help `npm run dev` on its own.
+
+9. **Found and fixed a second, separate bug via `npm run dev`**: even with `shared` building to `dist/`, the emitted `.js` still contained literal, unresolved `@/firebaseConfig/config` imports — `tsc` never rewrites alias imports in its output, in either `.js` or `.d.ts`. This only surfaced when Vite's dev server actually tried to *execute* the compiled file (unconditional at module-load time), not during `tsc -b`'s type-check (which never needed to fully resolve the unused import). Fixed with `tsc-alias`, run as a second build step (`"build": "tsc && tsc-alias"`) — confirmed the compiled output now imports `../../firebaseConfig/config`, a real relative path. Also confirmed this gap applies identically to Pattern A and Pattern B, since both rely on the same underlying `tsc` emit step.
+
+10. **Wrote up the whole alias saga as a new doc** in `katie-learning-notes`: `learning-notes/monorepo/consuming-workspace-packages.md`, covering the alias collision, Pattern A vs Pattern B, the `tsc-alias` fix, and the now-confirmed fact that Vite's dev server does follow the workspace symlink into `shared/dist/`.
+
+11. **Per Katie's request, moved `npm-workspaces.md` and `consuming-workspace-packages.md` to local-only** in `katie-learning-notes` — gitignored, untracked from git (`git rm --cached`), and gated out of the CI-built sidebar via the existing `isCI` pattern. Both remain fully intact and visible in the local sidebar.
+
+12. **Deployed and verified GitHub Pages CDN caching behavior** — after hiding the two docs, `curl` initially returned stale `200`s for both; confirmed via `git clone --depth 1 --branch gh-pages` that the actual deployed branch was already correct, and a cache-busted request returned real `404`s — the delay was CDN propagation, not a failed deploy.
+
+### Current Status
+
+- `web/` now has a real, working Vite + React + TypeScript + Tailwind + React Router setup, with `@vocabpal/shared` importable both in `npm run build` and `npm run dev`
+- `shared/`'s build pipeline is `tsc && tsc-alias`, producing a clean, runtime-safe `dist/` with no unresolved alias imports
+- SCRUM-295 has one open gap: `Words` still isn't reachable at `/words` specifically (only `/`) — decision on how to resolve it was interrupted, not yet made
+- `npm-workspaces.md` and `consuming-workspace-packages.md` are local-only in `katie-learning-notes`; everything else from this session is pushed and live
+
+### Next Steps
+
+1. Decide and implement the `/words` route fix for SCRUM-295 (add a second route vs. replace the index route)
+2. Wire `getWordsByUser` into `Words.tsx`'s actual render logic (currently imported but unused)
+3. Consider adding `shared`'s `build:watch` script and documenting the two-terminal dev workflow (`tsc --watch` in `shared/` + `npm run dev` in `web/`) if this friction keeps coming up
+4. Continue SCRUM-213 subtasks: SCRUM-294 (Tailwind — effectively done), SCRUM-296 (connect to shared — effectively done, pending final Jira transition)
 
 ---
