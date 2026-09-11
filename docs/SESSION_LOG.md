@@ -1432,3 +1432,41 @@
 4. Continue SCRUM-213 subtasks: SCRUM-294 (Tailwind — effectively done), SCRUM-296 (connect to shared — effectively done, pending final Jira transition)
 
 ---
+
+## Session 22 — September 11, 2026
+
+### What We Did
+
+1. **Reconciled `katie-learning-notes`'s Session Logs page further** — renamed the stale "Sprint 2/3/4" headers to match the live board's real sprint themes, refreshed the Sprint 3 status table (SCRUM-213/292–296 all confirmed Done against the live board — Katie had transitioned these herself), added a Session 21 narrative, then removed an open-items note at Katie's request.
+
+2. **Fixed the navbar GitHub link** in `katie-learning-notes` (`docusaurus.config.ts`) — was pointing at `github.com/katiem` (a placeholder), corrected to the real account `github.com/ThuyKat`.
+
+3. **Actually ran `scripts/sync-jira.js` for the first time**, at Katie's request, to verify a public post's claim that it syncs comments automatically. Found a second, deeper problem beyond the URL/ticket-map fix from Session 21: every request 404'd because the `.env` `JIRA_EMAIL`/`JIRA_API_TOKEN` pair isn't authorized on `vocabpal.atlassian.net` at all — a different Atlassian account than whatever's connected via this session's Atlassian MCP OAuth. Diagnosed precisely (confirmed via a direct authenticated `fetch` reproducing the exact 404 and reading Jira's actual error body). Fix requires generating a fresh API token from the account that actually owns `vocabpal.atlassian.net` — not something completable from this session.
+
+4. **Fixed a `Firebase: Error (auth/invalid-api-key)` crash** — `web/vite.config.ts` (the real app config used by `npm run dev`, as opposed to `web/vitest.config.ts`) never got the `envDir: '../'` fix from earlier sessions. Vite's dev server defaulted to looking for `.env` inside `web/` itself, found nothing, and `VITE_FIREBASE_API_KEY` resolved to `undefined` at runtime. Fixed and verified directly via Vite's own `loadEnv` function (not just inference) that the API key now resolves correctly.
+
+5. **Reviewed and approved SCRUM-297 (Learn: React Router layout patterns) and SCRUM-298 (Create Layout component)** — Katie built `Layout.tsx` (`Header` + `<Outlet />` + `Footer`), correctly nested `Words`/`Flashcards`/`Categories` under it while keeping `SignIn` outside, and styled `Header` with real Tailwind utilities. Verified via `npm run build`. Posted a `[Code Review Feedback] — APPROVED` comment on SCRUM-298, flagging two pre-existing, non-blocking items (the unused `getWordsByUser` import, and the still-open `/words` routing gap) as tracked separately rather than blockers.
+
+6. **Taught Tailwind CSS from Katie's existing CSS/SCSS background** — utility-first vs. named-class mental model, a direct SCSS-concept-to-Tailwind-concept mapping table, and the three standard ways to avoid repeating identical utility classes across elements (component extraction, a JS constant, or `@apply` — with the honest caveat that the community steers away from leaning on `@apply` too much).
+
+7. **Corrected a misreading of Katie's own explanation of `<Outlet />`** — she'd said it correctly the first time ("Layout wraps around Words/Flashcards/Categories" = Layout is the outer wrapper); the ambiguous phrasing was misparsed as backwards on first read, caught and corrected once she clarified.
+
+8. **Wrote a new local-only doc**: `katie-learning-notes/docs/learning-notes/react/router-and-layout.md` (SCRUM-297/298) — covers `<Outlet />` and nested routes, `NavLink` vs `Link`, the Tailwind/SCSS bridge, the DRY-duplication solutions, a TypeScript return-type-inference side note, and the SCRUM-298 code review result. Gitignored and gated behind `isCI` in `sidebars.ts` (new "React" category, entirely local-only for now), matching the established pattern — verified both local and simulated-CI builds succeed.
+
+9. **Saved two memory entries** for future sessions: Katie learns build-tooling/monorepo concepts best through real, narrated debugging rather than tutorials or upfront explanation (her own words, prompted by this session's alias saga); and her CSS background (solid CSS, one prior SCSS project, no Tailwind before this project) — to keep bridging new CSS concepts from SCSS vocabulary going forward.
+
+### Current Status
+
+- `web/`'s dev server now correctly loads Firebase config; `npm run dev` should no longer throw `auth/invalid-api-key`
+- SCRUM-297 and SCRUM-298 are Done, both subtasks of SCRUM-214 (which itself is still showing "To Do" at the Story level — a minor Jira bookkeeping gap, not touched)
+- `sync-jira.js` is logic-correct but still non-functional pending a valid API token for the account that owns `vocabpal.atlassian.net`
+- `router-and-layout.md` joins `npm-workspaces.md` and `consuming-workspace-packages.md` as local-only docs in `katie-learning-notes`
+
+### Next Steps
+
+1. Generate a fresh Jira API token from the account with access to `vocabpal.atlassian.net`, update `.env`, and re-run `sync-jira.js` to actually verify it end-to-end
+2. Decide and implement the `/words` route fix for SCRUM-295 (still open, carried over from Session 21)
+3. Wire `getWordsByUser` into `Words.tsx`'s actual render logic (still open, carried over)
+4. Continue SCRUM-214's remaining scope now that its two subtasks are done — check whether the Story itself should transition
+
+---
