@@ -4,6 +4,7 @@ import Words from '@/pages/Words';
 import SignIn from '@/pages/SignIn';
 import Categories from '@/pages/Categories';
 import Layout from '@/pages/Layout';
+import ProtectedRoute from '@/pages/components/ProtectedRoute';
 import AuthProvider from '@/providers/AuthProvider';
 
 function App() {
@@ -12,10 +13,12 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/signin" element={<SignIn />} />
-          <Route element={<Layout />}>
-            <Route index element={<Words />} />
-            <Route path="/flashcards" element={<Flashcards />} />
-            <Route path="/categories" element={<Categories />} />
+          <Route element={<ProtectedRoute />}>
+            <Route element={<Layout />}>
+              <Route index element={<Words />} />
+              <Route path="/flashcards" element={<Flashcards />} />
+              <Route path="/categories" element={<Categories />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
