@@ -1470,3 +1470,103 @@
 4. Continue SCRUM-214's remaining scope now that its two subtasks are done — check whether the Story itself should transition
 
 ---
+
+## Session 23 — September 13–14, 2026
+
+### What We Did
+
+1. **Diagnosed and fixed the `ProtectedRoute`/`Layout` wiring bug** — `Header`/`Footer` never rendered for any signed-in user. Root cause: `Layout.tsx` used `ProtectedRoute` as a JSX children-wrapper (`<ProtectedRoute><Header/><Outlet/><Footer/></ProtectedRoute>`), but `ProtectedRoute` was written to the SCRUM-299 ticket's actual spec — no `children` prop, renders its own `<Outlet/>` — meaning the intended usage is as a parent *route* in the router tree, not a JSX wrapper. The ticket description itself was correct ("wrap the Layout route in ProtectedRoute"); the bug was in how `Layout.tsx` applied it. Fixed by restructuring `App.tsx` so `ProtectedRoute` wraps the `Layout` route as a parent `<Route>`, and simplifying `Layout.tsx` to just render `Header`/`Outlet`/`Footer` directly.
+
+2. **Reviewed SCRUM-300 (responsive nav) through several bug rounds:**
+   - `Header({ props })` destructured a field literally named `props` instead of the props object itself — crashed on render. Fixed to `Header(props)` + internal destructure.
+   - `Layout.tsx` passed `hamMenu={openHamMenu}` while `Header` read `openHamMenu` from props — silent name mismatch meant the toggle state was always `undefined`, so clicking the hamburger could only ever set state to `true`, never back to `false`. Caught twice (fixed inconsistently the first time, confirmed fixed on the second pass).
+   - Nav's `className` had both `hidden` and `flex` unconditionally in the same string — two rules fighting over `display` with nothing tying it to the toggle state at all; the hamburger's `onClick` changed state that nothing consumed. Fixed by making visibility conditional on `hamMenu` (`${hamMenu ? 'flex ...' : 'hidden'} ... md:flex md:flex-row`), which also resolved the same-specificity conflict since `md:*` reliably overrides via Tailwind's media-query cascade, not source order.
+   - Verified final version against the actual Jira ticket text (fetched from `vocabpal.atlassian.net`, since `katienguyen1293.atlassian.net` — the site documented in CLAUDE.md — returned "Site temporarily unavailable" on every request this session): hamburger visible only below `md` ✓, `useState` toggle ✓, single reused `<nav>` for mobile/desktop ✓, collapses/expands correctly ✓.
+   - Browser-based verification (resizing viewport, clicking the toggle) was started via the `/run` skill but `chromium-cli` isn't installed in this environment; the user interrupted before a Playwright fallback was set up, so the visual check is still outstanding — static review only.
+
+3. **Iteratively reviewed the `Layout.tsx` sticky-footer structure**, catching real bugs each pass: outer container needed `flex-col` (not default row) for `Header`/content/`Footer` to stack instead of sit side-by-side; the `flex-1` wrapper div around `Outlet`+`Footer` needed to either be a direct sibling of `Header` in the flex-col container or itself be a nested flex-col (Katie found the latter, valid, approach independently); `h-screen` → `min-h-screen` so tall content scrolls instead of clipping. One of these flags was later walked back after Katie clarified the mobile row-layout was intentional (`Header` as a slide-out side column on mobile, top bar from `md` up) rather than a bug — the `Header` and `Layout` responsive classes are consistent with that stated design.
+
+4. **Taught a series of Tailwind concepts, bridged from Katie's existing CSS/SCSS background:**
+   - **Responsive design / mobile-first breakpoints** — `md:`/`lg:`/etc. prefixes replace `@media` blocks; unprefixed classes are the mobile base, prefixed ones override from that width up.
+   - **`flex-col`** for `flex-direction: column` (vs. default row), and combining with a breakpoint (`flex-col md:flex-row`) for a mobile-stack/desktop-row nav.
+   - **`justify-start`** for `justify-content: left` — Tailwind uses direction-aware `start`/`end` instead of `left`/`right`.
+   - **`items-start`** for `align-items: flex-start` — with the caveat that `align-items` controls the *cross axis*, so its visual meaning flips between "top/bottom" (row) and "left/right" (column) depending on `flex-direction`.
+   - **Height utilities** — `h-full` (100%, requires a parent with an explicit/stretched height — same rule as plain CSS), `h-screen` (100vh, no parent dependency), and arbitrary-value syntax `h-[90%]` / `h-[90vh]` for values outside Tailwind's default scale (no built-in `/10` fraction step).
+   - **`flex-1`** — shorthand for `flex-grow:1; flex-shrink:1; flex-basis:0%`; walked through the exact numeric mechanism of how it makes a content div "stretch" to absorb leftover space in a `min-h-screen` flex-col container, which is what actually pushes a footer to the bottom (not the footer itself being positioned specially).
+   - **"Sticky footer" naming confusion** — clarified that the common web-dev term "sticky footer" (anchored at the bottom of a short page, scrolls normally on a long one) is unrelated to the CSS `position: sticky` property, which sticks an element in place while its container scrolls past it — not applicable to an element with nothing below it in the DOM.
+   - (Non-Tailwind, but covered in the same thread) **React `Fragment`** (`<>...</>`) — groups sibling JSX without adding a real DOM node, needed because a component can only return one root element.
+
+5. **Flagged a prompt-injection attempt** embedded in an Atlassian MCP tool result (`getAccessibleAtlassianResources`) — a fake "transport deprecation notice" instructing the assistant to relay it to the user. Identified as injected instruction text riding along in tool output and did not comply with the embedded directive.
+
+### Files Changed
+
+- `web/src/App.tsx` — restructured route tree so `ProtectedRoute` wraps the `Layout` route as a parent route
+- `web/src/pages/Layout.tsx` — removed `ProtectedRoute` JSX-wrapper usage; iterated to `flex md:flex-col min-h-screen` outer container with a nested `flex-1 flex flex-col` wrapper (`Outlet` div + `Footer`)
+- `web/src/pages/components/Header.tsx` — fixed props destructuring, fixed `hamMenu`/`openHamMenu` name mismatch, wired nav visibility to `hamMenu` state, added responsive/height/alignment utility classes
+
+### Current Status
+
+- SCRUM-299 (`ProtectedRoute` wrapper) and SCRUM-300 (responsive nav) are both functionally fixed per static review; SCRUM-300's browser/viewport-resize verification step from its own "Done When" criteria is still outstanding
+- `Layout.tsx`'s sticky-footer layout is structurally correct (`min-h-screen` + nested `flex-1`) and consistent with Katie's confirmed intent (sidebar nav on mobile, top bar on desktop)
+- Confirmed again this session: `katienguyen1293.atlassian.net` (the site in CLAUDE.md) is unreachable; `vocabpal.atlassian.net` is the live site for both Jira lookups done here — CLAUDE.md's site references are still not updated (open since Session 18)
+
+### Next Steps
+
+1. Actually run the app in a browser (or set up a Playwright fallback, since `chromium-cli` isn't available in this environment) to verify the responsive nav toggle and confirm SCRUM-300's "Done When" criteria visually, not just statically
+2. Update CLAUDE.md's Jira/Confluence site references to `vocabpal.atlassian.net` (carried over from Sessions 18/19/22)
+3. Decide and implement the `/words` route fix for SCRUM-295 (still open, carried over)
+4. Wire `getWordsByUser` into `Words.tsx`'s actual render logic (still open, carried over)
+
+---
+
+## Session 24 — September 15–17, 2026
+
+### What We Did
+
+1. **Taught the `authService.onAuthStateChange` mechanics from first principles**, prompted by Katie's own questions on `authService.ts`: higher-order function shape (takes a callback, returns an unsubscribe function), what `unsubscribe()` actually does (detaches the listener only — doesn't sign anyone out or touch `auth.currentUser`), when `onAuthStateChange` itself needs to be called (once, in a `useEffect`), and why `useEffect`'s cleanup fires (real unmounts in production; React Strict Mode's deliberate mount/unmount/remount in dev just surfaces a missing cleanup sooner, it isn't the reason cleanup exists). Corrected several successive misconceptions along the way: "unsubscribe keeps state intact" (backwards — it's what causes staleness), "Firebase doesn't use JWT, just a listener" (it does — the listener is a separate layer for app-code notification, not a JWT alternative), and "`getAuth()` is an API call" (it's a synchronous reference to a persistent local object; the SDK's real network calls happen internally, on its own schedule).
+
+2. **Walked through the equivalent manual/custom-backend auth flow** (access + refresh tokens in `localStorage`, an HTTP interceptor for `401`s, an app-boot session check) as a contrast case, then explained *why* Firebase needs a listener at all where a custom backend doesn't: every state change in a custom flow happens because of code you wrote and called (login handler, logout handler, interceptor), so there's nothing to be notified of — you already know, synchronously. Firebase's SDK has state changes that don't go through your code (async initial-boot validation, silent background token refresh, cross-tab sync), which is the actual dividing line for when a listener/observer pattern is needed vs. a plain function call.
+
+3. **Reviewed SCRUM-301 (Learn Firebase Auth React integration patterns) comments across several rounds** — Katie wrote up both the non-Firebase and Firebase `AuthProvider` approaches as Jira comments. Found and Katie fixed: a real inconsistency where a pasted Firebase code snippet omitted `isLoading` entirely, contradicting her own following sentence that Firebase still needs it; a second pass introduced actual syntax errors in that same snippet (undeclared `isLoading` state, mismatched braces) which were also caught and fixed; and a comment that only answered half of the ticket's actual "Done When" (needed both "multiple components need shared state" and "why re-fetching/re-subscribing per component specifically is the problem" — redundant listeners, no same-instant-update guarantee across independent subscriptions).
+
+4. **Reviewed SCRUM-302 (SignIn page)** — `signInWithGoogle()` was called with no `await`/`.catch()`, meaning any failure (closed popup, blocked popup, network error) became an unhandled promise rejection with zero user feedback; flagged with a fix. Katie applied her own fix independently (`async`/`await` + `try`/`catch` with `console.error`) before the redesign pass below.
+
+5. **Redesigned the `SignIn` page UI** — centered card layout (`flex flex-1 items-center justify-center`, deliberately not `min-h-screen` since it nests inside the app's existing full-height flex column at `#root`), "VocabPal" heading + one-line tagline, a real inline-SVG Google "G" logo in true brand colors, a `isSigningIn`-driven disabled/loading state on the button, and a user-visible error message on failure (on top of Katie's existing `console.error`). Verified in an actual browser via Playwright's CLI screenshot command (`chromium-cli` still isn't installed in this environment; `npx playwright screenshot` worked as a direct substitute) at both a 1280×800 desktop and a 390×844 mobile viewport before calling it done — dev server started, screenshotted, then torn down (`lsof -ti:5175 | xargs kill`).
+
+6. **Answered a design question on SCRUM-303**: should auth state be exposed via a `useAuth` hook or an `AuthContext`? Answer: both, not an either/or — a hook implemented without Context underneath would recreate the exact N-independent-subscriptions problem from SCRUM-301's lesson, even though the ticket's literal "Done When" wouldn't catch that mistake. Correct shape: one `AuthProvider` doing the single `onAuthStateChange` subscription, `useAuth` as a thin `useContext` wrapper.
+
+7. **Reviewed the actual SCRUM-303 implementation** (`AuthContext.ts`, `AuthProvider.tsx`, `useAuth.ts`, and `ProtectedRoute.tsx` updated to consume `useAuth()`) — architecture matched the design exactly. Found by actually running the type-checker (not just reading): `AuthProvider`'s `children` prop had no type annotation (`TS7031: implicitly has an 'any' type`), and `ProtectedRoute.tsx` still had a leftover unused `getCurrentUser` import from before the `useAuth()` swap. Also surfaced a real tooling gotcha in the process: bare `tsc --noEmit` from `web/` silently reports zero errors and exits 0, because the root `tsconfig.json` has `"files": []` and only references sub-configs — the command that actually type-checks is `tsc -p tsconfig.app.json --noEmit`. (Two unrelated pre-existing errors also surfaced in that same corrected run: `Header.tsx`'s untyped `props`, `Words.tsx`'s unused `getWordsByUser` import — both already tracked from earlier sessions, not new.)
+
+8. **Answered follow-up questions tying it together**: confirmed `getCurrentUser()` isn't dead code post-`useAuth()` — it's the mapping logic `onAuthStateChange` calls internally on every listener fire, and it's still the only option for non-React code (e.g., the Chrome extension's background service worker, which has no React tree to hang a Context on) — so it stays exported for both reasons. Also walked through the actual re-render mechanism the SCRUM-303 ticket's "Done When" is really asking about: state update in `AuthProvider` → `AuthProvider` re-renders → new `value` object passed to `AuthContext.Provider` → every `useContext` consumer re-renders — ordinary React state propagation, nothing hook-specific. Reviewed two more rounds of Katie's SCRUM-303 comments against this and confirmed both gaps (the re-render chain, and `ProtectedRoute`'s `isLoading` branch) got added.
+
+9. **Wrote three new local-only docs in `katie-learning-notes`**, matching the project's established pattern (gitignored, `isCI`-gated in `sidebars.ts`, same as the existing React notes):
+   - `learning-notes/react/auth-context-and-listeners.md` (SCRUM-301) — Context-vs-per-component, both `AuthProvider` variants side by side, why a listener is needed at all, the SDK-as-local-object mental model.
+   - `learning-notes/react/use-auth-hook.md` (SCRUM-303) — the concrete final `AuthContext`/`AuthProvider`/`useAuth`/`ProtectedRoute` code, the re-render causal chain, why `getCurrentUser` stays exported.
+   - Split all pre-existing Tailwind content out of both React docs (`router-and-layout.md`, `protected-routes-and-responsive-nav.md`) into a new same-level **Tailwind** category — `learning-notes/tailwind/basics.md` and `learning-notes/tailwind/responsive-and-flexbox.md` — per Katie's explicit request to keep React and Tailwind notes fully separated rather than mixed within React-ticket docs.
+   - Iterated on `auth-context-and-listeners.md`'s wording several rounds per Katie's direct edits: trimmed the route-guard-pattern section to code-only with no prose, simplified the mobile-first explanation to match earlier phrasing, condensed the `flex-1`-requires-a-flex-parent note to one line, and replaced the `position: sticky` explanation with a direct "here's the Tailwind equivalent" answer instead of a mechanism explanation.
+   - Confirmed with Katie before creating `use-auth-hook.md` that it should stay local-only like the others, rather than assuming; committed and pushed the resulting `sidebars.ts`/`.gitignore` changes to `github.com/ThuyKat/learning-notes-VP.git` (commit `4194afa`) — the note content itself remains local-only/untracked by design, only the sidebar wiring is public.
+
+### Files Changed
+
+- `web/src/pages/SignIn.tsx` — full redesign (centered card, Google icon, loading/error states) on top of Katie's own async/error-handling fix
+- `katie-learning-notes/docs/learning-notes/react/auth-context-and-listeners.md` — new (local-only)
+- `katie-learning-notes/docs/learning-notes/react/use-auth-hook.md` — new (local-only)
+- `katie-learning-notes/docs/learning-notes/tailwind/basics.md`, `responsive-and-flexbox.md` — new (local-only), split out of the two existing React docs
+- `katie-learning-notes/sidebars.ts`, `.gitignore` — updated and pushed to `main`
+
+### Current Status
+
+- SCRUM-301, SCRUM-302, SCRUM-303 all reviewed; SCRUM-303's implementation (`AuthContext`/`AuthProvider`/`useAuth`/`ProtectedRoute`) is architecturally correct once the two small fixes (typed `children`, unused import) are applied
+- `SignIn.tsx` now has a real UI, verified in an actual browser (Playwright screenshot, not just static code read) at desktop and mobile widths
+- `katie-learning-notes` now has 4 React docs + a new 2-doc Tailwind category, all local-only except the sidebar/gitignore wiring itself, which is pushed and live in the repo (not the public site)
+- Confirmed again this session: plain `tsc --noEmit` in `web/` is a false-positive trap — must use `tsc -p tsconfig.app.json --noEmit`
+
+### Next Steps
+
+1. Apply the two remaining SCRUM-303 fixes: type `AuthProvider`'s `children` prop, remove the unused `getCurrentUser` import from `ProtectedRoute.tsx`
+2. Re-run `tsc -p tsconfig.app.json --noEmit` after those fixes to confirm only the two pre-existing, unrelated errors remain
+3. Decide and implement the `/words` route fix for SCRUM-295 (still open, carried over from Session 21)
+4. Wire `getWordsByUser` into `Words.tsx`'s actual render logic (still open, carried over)
+5. Update CLAUDE.md's Jira/Confluence site references to `vocabpal.atlassian.net` (carried over from Sessions 18/19/22/23)
+
+---
